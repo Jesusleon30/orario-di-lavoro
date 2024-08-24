@@ -1,9 +1,9 @@
-import { HeaderUno, HeaderDue, HeaderQuattro } from "./components";
+import { HeaderPrincipale } from "./components";
 
 export default function HeaderTotal() {
   return (
     <>
-      <HeaderQuattro />
+      <HeaderPrincipale />
     </>
   );
 }

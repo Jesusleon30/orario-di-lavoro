@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./css/index.css";
 
-export default function FooterUno(props) {
+export default function FooterBase(props) {
   const [counter, setCounter] = useState(0);
 
   function handleClick() {

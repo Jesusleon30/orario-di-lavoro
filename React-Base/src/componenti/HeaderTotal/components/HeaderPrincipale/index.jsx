@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./css/index.css";
 
 
-export default function HeaderQuattro() {
+export default function HeaderPrincipale() {
   const [menu, setMenu] = useState(false);
 
   const toggleMenu = () => {

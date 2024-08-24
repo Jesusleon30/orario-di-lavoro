@@ -1,1 +1,1 @@
-export { default as FooterUno} from "./FooterUno"
+export { default as FooterBase} from "./FooterBase"

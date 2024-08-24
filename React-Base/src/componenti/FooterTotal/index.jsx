@@ -1,9 +1,9 @@
-import { FooterUno } from "./components";
+import { FooterBase } from "./components";
 
 export default function FooterTotal() {
   return (
     <>
-      <FooterUno hola="jesus" lastname="Retamozo" />
+      <FooterBase hola="jesus" lastname="Retamozo" />
 
       
       

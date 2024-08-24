@@ -1,0 +1,34 @@
+.text{
+    color:rgb(52, 212, 159);
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin-top: 50px;
+
+
+}
+.container-footer{
+
+    display: flex;
+    flex-direction: column;
+    gap:30px;
+    margin-top: 50px;
+
+}
+
+.img-footer{
+    display: flex;
+    gap: 20px;
+}
+
+.container-sitio{
+    display: flex;
+    align-items: center;
+    /* centra de forma vertical */
+    justify-content: center;
+    /* centra de forma orizzontale */
+    flex-wrap: wrap;
+    text-align: center;
+    
+    gap:20px;
+}

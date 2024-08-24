@@ -1,0 +1,73 @@
+.section-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.card-lista {
+  background-color: rgb(0, 0, 0, 0.3);
+  box-shadow: 0px 10px 15px -3px rgba(51, 120, 239, 0.2);
+  width: 250px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.image-lista {
+  width: 240px;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.name-lista {
+  text-align: center;
+  font-weight: bold;
+  color: rgb(52, 190, 190);
+}
+
+.name-lista:hover {
+  color: rgb(200, 225, 14);
+}
+
+.card-lista:hover {
+  background-color: rgba(17, 180, 172, 0.2);
+  box-shadow: 0px 10px 15px -3px rgba(86, 141, 30, 0.2);
+  width: 320px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+}
+
+.image-lista:hover {
+  width: 300px;
+  height: 200px;
+  
+}
+
+.description-lista {
+  color: rgb(202, 250, 10);
+}
+
+.open{
+  border-radius: 20px;
+  border: solid white;
+  background: blue;
+  width:100px;
+  padding: 4px;
+}
+
+.open:hover{
+  border: solid rgb(232, 223, 58);
+  background: rgb(225, 107, 23);
+  width:150px;
+
+}

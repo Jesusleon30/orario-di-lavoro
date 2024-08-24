@@ -1,0 +1,95 @@
+.text{
+    color:aliceblue;
+    font-size: 15px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.container-siti{
+    display: flex;
+    align-items: center;
+    /* centra de forma vertical */
+    justify-content: center;
+    /* centra de forma orizzontale */
+    flex-wrap: wrap;
+    
+    gap:20px;
+}
+
+
+.div-profilo{
+    background-color:rgba(110, 107, 107) ;
+    /* color a todo el div donde se encuentra todo  h1 h2 p ul  (es un block entero) */
+    width: 350px;
+    /* ancho de la pantalla al div al ...% reducimos las dimensiones */
+    padding:15px;
+    /* padding es un espacio interno entre los elementos
+    por ejemplo la foto toma espacio a los costados ecc... */
+    text-align: center;
+    /* esto centra todo mi texto y elementos  */
+    border-radius:15px;
+    
+}
+
+
+
+
+
+
+.parrafo-lista{
+    font-size: 14px;
+    margin-top: 14px;
+     /* margin hacia arriva */
+    margin-bottom: 20px;
+     /* margin hacia abajo */
+
+}
+
+ul{
+    list-style: none;
+    /* es para sacar los puntos de la lista de al costado */
+}
+
+
+/* se io vado sul elemento l'indicatore del mouse cambiera da freccia a mano sarebbe
+ un dettaglio */
+ul > li > a {
+    text-decoration: none;
+    /* esto le quita el sup-rallado de las letras (toglie il sottolineato)*/
+    color: white;
+    /* color del texto sea blanco */
+    margin-top: 20px;
+    /* entre cada li tenga un margen hacia arriva unos 20px */
+    background-color: rgb(21, 19, 19);
+    /* colore a lo sfondo di ogni li  */
+    padding: 15px;
+    /* spazio dentro li im modo che lo sfondo insieme alla lettere abbiano spazio tra di loro */
+    border-radius: 18px;
+    /* serve a mettere i bordi gli smussi arrotondati raggio */
+    display:block;
+    /* l´elemento a e inline dobbiamo trasformarlo in block */
+}
+
+/* el elemento a tiene un stilo llamado hover, en este caso para cambiar de efecto 
+le metemos un color apenas entre el mouse dentro de a */
+.a-container-profilo:hover {
+    /* ahora cada vez que valla con el mouse ad a se cambiara el sfondo y el color del texto */
+
+    background-color: rgb(222, 156, 70);
+    /* colore dello sfondo */
+    color:rgb(215, 20, 20);
+    /* colore del testo */
+
+    font-size: 30px;
+    font-weight: 500;
+
+}
+
+
+
+
+
+

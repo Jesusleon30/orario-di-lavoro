@@ -1,0 +1,87 @@
+
+
+.container-menu{
+    color:aliceblue;
+}
+
+.container-lista{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #434750;
+}
+
+.ul-lista{
+    position: relative;
+    /* gira las letras tipo 3d */
+    transform: skewY(-15deg);
+}
+
+.ul-lista  .li-lista {
+    position: relative;
+    list-style: none;
+    width: 200px;
+    background-color: rgb(16, 25, 62);
+    padding: 15px;
+    z-index: var(--i);
+    transition: 0.5s;
+}
+
+.ul-lista .li-lista:hover {
+    background:cornflowerblue;
+    transform: translateX(-50px);
+}
+
+/* figlio immediato de li lateral sx */
+.ul-lista .li-lista::before{
+    content:''; /* contenido vacio */
+    position: absolute;
+    top: 0;
+    left: -40px; /* a lado sx sin dejar espacio*/
+    width: 40px; 
+    height: 100%;
+    background:rgb(51, 78, 195);
+    transform-origin: right; /*valore di offset*/
+    transform: skewY(45deg);
+    transition: 0.5s; /* aparece dopo pocos segundos */
+}
+
+.ul-lista > .li-lista:hover::before{
+    background: cornflowerblue;
+}
+
+/* figlio immediato de li sopra */
+.ul-lista  .li-lista::after{
+    content:''; /* contenido vacio */
+    position: absolute;
+    top: -40px;
+    left: 0; /* a lado sx sin dejar espacio*/
+    width: 100%; 
+    height: 40px;
+    background:rgb(40, 58, 141);
+    transform-origin:bottom;
+    transform: skewX(45deg);
+    transition: 0.5s;
+}
+.ul-lista > .li-lista:hover::after{
+    background: cornflowerblue;
+
+}
+
+.ul-lista > .li-lista > .a-lista {
+    text-decoration: none;
+    color:gray;
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: 0.5s; /* aparece dopo pocos segundos */
+}
+/* quando me acerco al texto hace efecto */
+.ul-lista > .li-lista:hover > .a-lista {
+    color:white;
+}
+
+.ul-lista > .li-lista:last-child::after{
+    box-shadow: -120px 120px 20px rgba(0,0,0,0.25);
+}

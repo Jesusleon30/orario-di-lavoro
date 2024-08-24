@@ -1,0 +1,42 @@
+
+.wrapper {
+  display: flex;
+}
+
+.wrapper .sec-texts {
+  height: 32px;
+  line-height: 32px;
+  overflow: hidden;
+}
+
+
+.sec-texts .li-wrapper {
+  position: relative;
+  top: 0;
+  font-size: 25px;
+  color: rgb(52, 211, 219);
+  list-style: none;
+  padding: 0 10px;
+  text-shadow: 0 0 4px rgb(43, 118, 123);
+  animation: slide 18s steps(6) infinite;
+  /*step(6) xk son 6 span*/
+}
+
+@keyframes slide {
+  100% {
+    top: -190px;
+  }
+}
+
+@keyframes colorful {
+  100% {
+    filter: (190deg);
+    /*La hue-rotate()funzione applica una rotazione
+       di colore agli elementi su cui viene applicata.*/
+  }
+}
+
+.sec-texts .li-wrapper  span {
+  position: relative;
+}
+

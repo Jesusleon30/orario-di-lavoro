@@ -1,7 +1,5 @@
 import "./css/index.css";
 
-import "./css/index.css";
-
 import React, { useState, useEffect } from "react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -30,7 +28,6 @@ const DurationSelector = ({ onDurationClick, durations }) => (
         </button>
       ))}
     </div>
-    {/* Botón adicional para seleccionar "CONTINUATO" */}
     <button
       className="h-14 bg-orange-600 hover:bg-blue-600 rounded items-center border-2 border-white text-black"
       onClick={() => onDurationClick("CONTINUATO")}
@@ -39,19 +36,16 @@ const DurationSelector = ({ onDurationClick, durations }) => (
     </button>
   </div>
 );
-
-export default function CalendarioLavoro() {
-  // Estado inicial del componente
+export default function Logocopy15() {
   const [state, setState] = useState({
-    selectedDate: dayjs(), // Fecha seleccionada inicial
-    selectedTime: dayjs().hour(8).minute(0), // Hora de inicio inicial
-    endTime: dayjs().hour(17).minute(0), // Hora de fin inicial
-    cliente: "", // Cliente inicial (vacío)
-    duracion: "1h", // Duración por defecto
-    dates: [], // Lista de fechas guardadas
+    selectedDate: dayjs(),
+    selectedTime: dayjs().hour(8).minute(0),
+    endTime: dayjs().hour(17).minute(0),
+    cliente: "",
+    duracion: "1h",
+    dates: [],
   });
 
-  // Carga de fechas del local storage cuando se monta el componente
   useEffect(() => {
     const loadDatesFromLocalStorage = () => {
       try {
@@ -59,71 +53,91 @@ export default function CalendarioLavoro() {
         if (retrievedData) {
           setState((prevState) => ({
             ...prevState,
-            dates: JSON.parse(retrievedData), // Convierte la cadena JSON a un objeto
+            dates: JSON.parse(retrievedData),
           }));
         }
       } catch (error) {
-        console.error("Error loading dates from localStorage:", error); // Manejo de errores
+        console.error("Error loading dates from localStorage:", error);
       }
     };
     loadDatesFromLocalStorage();
   }, []);
 
-  // Función para capturar la fecha y hora seleccionadas
   const handleCaptureDateAndTime = () => {
     const { selectedDate, selectedTime, endTime, duracion, cliente } = state;
 
-    if (selectedDate.isValid() && selectedTime) {
-      try {
-        const formattedDate = selectedDate.format("DD-MM-YYYY");
+    if (selectedDate.isValid()) {
+      const formattedDate = selectedDate.format("DD-MM-YYYY");
+
+      // Preparamos el nuevo objeto, asegurándonos de conservar los campos existentes si no han cambiado
+      const updatedDates = [...state.dates];
+      const idx = updatedDates.findIndex((date) => date.DATA === formattedDate);
+
+      if (idx > -1) {
+        // Encontramos el objeto existente
+        const existingEntry = updatedDates[idx];
+
+        // Creamos un nuevo objeto, solo actualizando los campos que pueden haber cambiado
+        const updatedEntry = {
+          ...existingEntry, // Conservamos los valores existentes
+          INIZIO: selectedTime
+            ? selectedTime.format("HH:mm")
+            : existingEntry.INIZIO,
+          FINE: endTime ? endTime.format("HH:mm") : existingEntry.FINE,
+          PRANZO: duracion || existingEntry.PRANZO,
+          CLIENTE: cliente || existingEntry.CLIENTE,
+        };
+
+        // Actualizamos el objeto en la lista
+        updatedDates[idx] = updatedEntry;
+      } else {
         const combinedDetailsObject = {
           DATA: formattedDate,
-          INIZIO: selectedTime.format("HH:mm"),
-          FINE: endTime.format("HH:mm"),
+          INIZIO: selectedTime ? selectedTime.format("HH:mm") : "",
+          FINE: endTime ? endTime.format("HH:mm") : "",
           PRANZO: duracion || "",
           CLIENTE: cliente,
         };
+        // Agregamos el nuevo objeto si no existe
+        updatedDates.push(combinedDetailsObject);
+      }
 
-        const updatedDates = [
-          ...state.dates.filter((date) => date.DATA !== formattedDate),
-          combinedDetailsObject,
-        ].sort(
-          (a, b) => dayjs(a.DATA, "DD-MM-YYYY") - dayjs(b.DATA, "DD-MM-YYYY")
-        );
+      // Ordenamos las fechas de forma creciente
+      const sortedDates = updatedDates.sort(
+        (a, b) => dayjs(a.DATA, "DD-MM-YYYY") - dayjs(b.DATA, "DD-MM-YYYY")
+      );
 
-        localStorage.setItem("dates", JSON.stringify(updatedDates)); // Guarda en local storage
-        setState((prevState) => ({ ...prevState, dates: updatedDates })); // Actualiza el estado
+      localStorage.setItem("dates", JSON.stringify(sortedDates));
+      setState((prevState) => ({ ...prevState, dates: sortedDates }));
+    }
+  };
+
+  const handleChange = (field) => (value) =>
+    setState((prevState) => ({ ...prevState, [field]: value }));
+
+  const handleClearDates = () => {
+    const confirmDelete = window.confirm("Sei sicuro di voler eliminare?");
+
+    if (confirmDelete) {
+      try {
+        localStorage.removeItem("dates");
+        setState((prevState) => ({ ...prevState, dates: [] }));
       } catch (error) {
-        console.error("Error capturing date and time:", error); // Manejo de errores
+        console.error("Error clearing dates:", error);
       }
     }
   };
 
-  // Función para actualizar el estado al cambiar campos
-  const handleChange = (field) => (value) =>
-    setState((prevState) => ({ ...prevState, [field]: value }));
-
-  // Función para limpiar las fechas del local storage y del estado
-  const handleClearDates = () => {
-    try {
-      localStorage.removeItem("dates"); // Elimina fechas guardadas
-      setState((prevState) => ({ ...prevState, dates: [] })); // Limpiar el estado
-    } catch (error) {
-      console.error("Error clearing dates:", error); // Manejo de errores
-    }
-  };
-
-  const durations = ["30 min", "1h", "1h 30min", "2h"]; // Opciones de duración disponibles
+  const durations = ["30 min", "1h", "1h 30min", "2h"];
 
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer 
-         components={["DatePicker"]}>
+        <DemoContainer components={["DatePicker"]}>
           <StaticDatePicker
             orientation="portrait"
             value={state.selectedDate}
-            onChange={handleChange("selectedDate")} // Actualiza la fecha seleccionada
+            onChange={handleChange("selectedDate")}
           />
           <DatePicker
             label="SELEZIONA DATA"
@@ -132,47 +146,57 @@ export default function CalendarioLavoro() {
             renderInput={(params) => (
               <TextField
                 {...params}
-                value={state.selectedDate.format("DD-MM-YYYY")} // Muestra la fecha formateada
+                value={state.selectedDate.format("DD-MM-YYYY")}
               />
             )}
           />
           <TimeSelector
             label="INIZIO"
             value={state.selectedTime}
-            onChange={handleChange("selectedTime")} // Actualiza la hora de inicio
+            onChange={handleChange("selectedTime")}
           />
           <DurationSelector
-            onDurationClick={handleChange("duracion")} // Actualiza la duración seleccionada
+            onDurationClick={handleChange("duracion")}
             durations={durations}
           />
           <TimeSelector
             label="FINE"
             value={state.endTime}
-            onChange={handleChange("endTime")} // Actualiza la hora de fin
+            onChange={handleChange("endTime")}
           />
           <TextField
-            placeholder="CLIENTE"
+            placeholder="sede o cliente"
             value={state.cliente}
-            onChange={(e) => handleChange("cliente")(e.target.value)} // Actualiza el cliente
+            onChange={(e) => handleChange("cliente")(e.target.value)}
           />
         </DemoContainer>
-        <button
-          className="bg-yellow-500 p-6 rounded text-xl 
-        hover:bg-yellow-300 font-mono hover:text-2xl hover:text-black"
-          onClick={handleCaptureDateAndTime} // Captura la fecha y hora al hacer clic
-        >
-          OK ✔
-        </button>
-        <button
-          className="bg-blue-900 p-2 text-blue-100 rounded font-mono
-        hover:bg-red-800 hover:text-xl hover:text-black"
-          onClick={handleClearDates} // Limpia las fechas al hacer clic
-        >
-          ELIMINARE DATI 🗑
-        </button>
-        <h2 className="text-white text-2xl">LISTA DATI :</h2>
-        <DetailsTable dates={state.dates} />{" "}
-        {/* Componente para mostrar la tabla de detalles */}
+        <div className="flex flex-col gap-8 items-center ">
+          <div>
+            <button
+              className="bg-yellow-500 p-6 rounded text-xl 
+          hover:bg-yellow-300 font-mono hover:text-2xl hover:text-black"
+              onClick={handleCaptureDateAndTime}
+            >
+              OK ✔
+            </button>
+          </div>
+
+          <div>
+            <h2 className="text-white text-2xl">LISTA DATI :</h2>
+          </div>
+          <div>
+            <button
+              className="bg-blue-900 p-2 text-blue-100 rounded font-mono
+          hover:bg-red-800 hover:text-xl hover:text-black "
+              onClick={handleClearDates}
+            >
+              ELIMINARE DATI 🗑
+            </button>
+          </div>
+        </div>
+        <div>
+          <DetailsTable dates={state.dates} />
+        </div>
       </LocalizationProvider>
     </>
   );

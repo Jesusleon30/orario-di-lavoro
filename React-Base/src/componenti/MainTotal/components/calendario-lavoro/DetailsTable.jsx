@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 
 // Componente que muestra detalles individuales
 function DetailCard({ details }) {
-  // Filtra y mapea las entradas del detalle para mostrar solo las relevantes
   const renderDetails = () => {
     return Object.entries(details)
       .filter(([key]) => key !== "CLIENTE")
@@ -37,13 +36,15 @@ export function DetailsTable({ dates }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    setData(dates);
+    // Ordena las fechas de forma creciente
+    const sortedDates = [...dates].sort(
+      (a, b) => new Date(a.DATA) - new Date(b.DATA)
+    );
+    setData(sortedDates);
   }, [dates]);
 
-  // Generar PDF a partir de los datos
   const generatePDF = () => {
     try {
-      // Verifica si hay datos
       if (data.length === 0) {
         console.error("No hay datos para generar el PDF.");
         return;
@@ -53,7 +54,6 @@ export function DetailsTable({ dates }) {
       doc.setFontSize(16);
       doc.text("LISTA DATI", 14, 20);
 
-      // Genera la tabla de datos
       autoTable(doc, {
         head: [["DATA", "INIZIO", "PRANZO", "FINE", "CLIENTE"]],
         body: data.map(({ DATA, INIZIO, PRANZO, FINE, CLIENTE }) => [

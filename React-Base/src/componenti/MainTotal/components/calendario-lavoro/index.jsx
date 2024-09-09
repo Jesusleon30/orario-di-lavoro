@@ -118,7 +118,8 @@ export default function CalendarioLavoro() {
   return (
     <>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={["DatePicker"]}>
+        <DemoContainer 
+         components={["DatePicker"]}>
           <StaticDatePicker
             orientation="portrait"
             value={state.selectedDate}

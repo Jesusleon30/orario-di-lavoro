@@ -1,0 +1,26 @@
+.MuiPickersLayout-root {
+    height: auto;
+    width: 50%;
+    color: blue;
+  }
+  
+  .css-gqp4xl-MuiPickersLayout-root {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    height: auto;
+    width: 30%;
+  
+  }
+  
+  /* ocultamos el button di CANCEL */
+  .MuiDialogActions-root button:first-child {
+    display: none; /* Oculta el primer botón (Cancel) */
+  }
+  
+  
+  .MuiPickersToolbar-root{
+    background:orange;
+  }
+  
+  

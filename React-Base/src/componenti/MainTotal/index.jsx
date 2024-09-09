@@ -1,12 +1,12 @@
 import {
-   Logo,
+  CalendarioLavoro,
 } from "./components";
 
 export default function MainTotal() {
   return (
     <>
       
-      <Logo />
+      <CalendarioLavoro />
   
 
    

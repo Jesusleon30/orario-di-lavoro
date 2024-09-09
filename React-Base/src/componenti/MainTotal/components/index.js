@@ -1,4 +1,4 @@
 
-export { default as Logo } from "./Logo";
+export { default as CalendarioLavoro } from "./calendario-lavoro";
 
 

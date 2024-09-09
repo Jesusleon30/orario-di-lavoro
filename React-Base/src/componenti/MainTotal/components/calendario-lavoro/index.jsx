@@ -39,10 +39,10 @@ const DurationSelector = ({ onDurationClick, durations }) => (
 export default function Logocopy15() {
   const [state, setState] = useState({
     selectedDate: dayjs(),
-    selectedTime: dayjs().hour(8).minute(0),
-    endTime: dayjs().hour(17).minute(0),
+    selectedTime: null,
+    endTime: null,
     cliente: "",
-    duracion: "1h",
+    duracion: "",
     dates: [],
   });
 

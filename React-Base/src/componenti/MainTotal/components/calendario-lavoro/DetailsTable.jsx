@@ -11,18 +11,18 @@ function DetailCard({ details }) {
       .map(([key, value]) => (
         <div className="flex flex-col" key={key}>
           <div>{key}:</div>
-          <div className="bg-blue-800 rounded">{value}</div>
+          <div className="text-white bg-gray-600  rounded">{value}</div>
         </div>
       ));
   };
 
   return (
-    <div className="mb-4 flex flex-col">
-      <div className="flex items-start gap-10 bg-gray-700 text-white rounded">
+    <div className=" flex flex-col ">
+      <div className="flex items-start justify-center gap-3 bg-gray-900 text-white rounded">
         {renderDetails()}
       </div>
-      <div className="bg-gray-700 text-white">Nota :</div>
-      <div className="bg-blue-800 text-white rounded">{details.CLIENTE}</div>
+      <div className="bg-gray-900 text-white">Nota :</div>
+      <div className=" text-white bg-gray-600 rounded">{details.CLIENTE}</div>
     </div>
   );
 }
@@ -88,17 +88,17 @@ export function DetailsTable({ dates }) {
       return;
     }
 
-    const confirmDownload = window.confirm("Vuoi scaricare in PDF ?");
+    const confirmDownload = window.confirm("Sei sicuro di scaricare in PDF ?");
     if (confirmDownload) {
       generatePDF();
     }
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col items-center justify-between  gap-5">
       <div>
         <button
-          className="bg-white rounded text-black border-2
+          className="bg-gray-400 rounded text-black border-2
           hover:bg-black hover:text-white border-black p-2 font-semibold"
           onClick={handleDownloadPDF}
         >

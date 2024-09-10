@@ -16,11 +16,11 @@ const TimeSelector = ({ label, value, onChange }) => (
 
 // Componente para seleccionar la duración
 const DurationSelector = ({ onDurationClick, durations }) => (
-  <div className="flex flex-col gap-5">
-    <div className="flex flex-row items-center gap-5">
+  <div className="flex flex-col  gap-5">
+    <div className="flex justify-center  items-center gap-5">
       {durations.map((duration) => (
         <button
-          className="w-16 h-16 bg-yellow-700 text-black rounded-full flex items-center justify-center border-2 border-white hover:bg-yellow-400 font-semibold"
+          className="w-16 h-16 bg-yellow-600 text-black rounded-full flex items-center justify-center  hover:bg-yellow-200 font-semibold"
           key={duration}
           onClick={() => onDurationClick(duration)}
         >
@@ -29,7 +29,7 @@ const DurationSelector = ({ onDurationClick, durations }) => (
       ))}
     </div>
     <button
-      className="h-14 font-semibold bg-yellow-600 hover:bg-yellow-400 rounded items-center border-white text-black"
+      className="h-14 font-semibold bg-yellow-700 hover:bg-yellow-200 rounded items-center border-white text-black"
       onClick={() => onDurationClick("CONTINUATO")}
     >
       CONTINUATO
@@ -173,21 +173,21 @@ export default function Logocopy15() {
         <div className="flex flex-col gap-8 items-center ">
           <div>
             <button
-              className="bg-blue-500  p-10 rounded-full text-2xl
-          hover:bg-yellow-200 font-mono hover:text-3xl hover:text-black font-semibold m-14"
+              className="bg-blue-500  p-4 rounded-full  text-2xl
+          hover:bg-yellow-400 font-mono hover:text-3xl hover:text-black font-semibold my-6 "
               onClick={handleCaptureDateAndTime}
             >
-              OK 😄
+              ok ✔
             </button>
           </div>
-          <div className=" flex flex-col  gap-8">
+          <div className=" flex flex-col  justify-center   items-center gap-8">
             <div>
-              <h2 className="text-white text-2xl">LISTA DATI :</h2>
+              <h2 className="text-white text-2xl">ELENCO DATI :</h2>
             </div>
             <div>
               <button
-                className="bg-blue-900 p-2 text-blue-100 rounded font-mono font-semibold
-          hover:bg-red-800 hover:text-xl hover:text-black "
+                className="bg-yellow-500 p-1 text-red-800 rounded font-semibold
+         hover:bg-red-600 hover:text-black "
                 onClick={handleClearDates}
               >
                 ELIMINARE DATI 🗑

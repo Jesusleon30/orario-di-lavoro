@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 
 // Componente que muestra detalles individuales
 function DetailCard({ details }) {
-  // Filtra y mapea las entradas del detalle para mostrar solo las relevantes
   const renderDetails = () => {
     return Object.entries(details)
       .filter(([key]) => key !== "CLIENTE")
@@ -22,7 +21,7 @@ function DetailCard({ details }) {
       <div className="flex items-start gap-10 bg-gray-700 text-white rounded">
         {renderDetails()}
       </div>
-      <div className="bg-gray-700 text-white">CLIENTE:</div>
+      <div className="bg-gray-700 text-white">Nota :</div>
       <div className="bg-blue-800 text-white rounded">{details.CLIENTE}</div>
     </div>
   );
@@ -43,15 +42,9 @@ export function DetailsTable({ dates }) {
   // Generar PDF a partir de los datos
   const generatePDF = () => {
     try {
-      // Verifica si hay datos
-      if (data.length === 0) {
-        console.error("No hay datos para generar el PDF.");
-        return;
-      }
-
       const doc = new jsPDF();
       doc.setFontSize(16);
-      doc.text("LISTA DATI", 14, 20);
+      doc.text("ELENCO DATI ORARI", 14, 20);
 
       // Genera la tabla de datos
       autoTable(doc, {
@@ -82,9 +75,22 @@ export function DetailsTable({ dates }) {
         margin: { top: 30 },
       });
 
-      doc.save("reporte_usuarios.pdf");
+      doc.save("Dati_orario.pdf");
     } catch (error) {
       console.error("Error al generar el PDF:", error);
+    }
+  };
+
+  // Función para manejar la descarga del PDF con alerta de confirmación
+  const handleDownloadPDF = () => {
+    if (data.length === 0) {
+      alert("Il pdf si trova vuoto ");
+      return;
+    }
+
+    const confirmDownload = window.confirm("Vuoi scaricare in PDF ?");
+    if (confirmDownload) {
+      generatePDF();
     }
   };
 
@@ -93,8 +99,8 @@ export function DetailsTable({ dates }) {
       <div>
         <button
           className="bg-white rounded text-black border-2
-          hover:bg-black hover:text-white border-black p-2"
-          onClick={generatePDF}
+          hover:bg-black hover:text-white border-black p-2 font-semibold"
+          onClick={handleDownloadPDF}
         >
           SCARICARE PDF
         </button>

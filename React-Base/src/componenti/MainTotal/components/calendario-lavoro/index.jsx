@@ -7,7 +7,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker, TimePicker, StaticDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { TextField } from "@mui/material";
-import { DetailsTable } from "./DetailsTable"; // Componente para la tabla de detalles
+// import { DetailsTable } from "./DetailsTable"; // Componente para la tabla de detalles
+import { DetailsTable_2 } from "./DetailsTable_2";
 
 // Componente para seleccionar la hora
 const TimeSelector = ({ label, value, onChange }) => (
@@ -15,6 +16,8 @@ const TimeSelector = ({ label, value, onChange }) => (
 );
 
 // Componente para seleccionar la duración
+
+//   const durations = ["30 min", "1h", "1h 30min", "2h"];
 const DurationSelector = ({ onDurationClick, durations }) => (
   <div className="flex flex-col  gap-5">
     <div className="flex justify-center  items-center gap-5">
@@ -195,7 +198,8 @@ export default function Logocopy15() {
             </div>
           </div>
           <div>
-            <DetailsTable dates={state.dates} />
+            {/* <DetailsTable dates={state.dates} /> */}
+            <DetailsTable_2 dates={state.dates} />
           </div>
         </div>
       </LocalizationProvider>

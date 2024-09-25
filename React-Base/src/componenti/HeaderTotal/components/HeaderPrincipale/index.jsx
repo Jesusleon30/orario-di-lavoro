@@ -42,19 +42,7 @@ export default function HeaderPrincipale() {
           <div className={`Cabecera-nav ${menu ? "isActive" : ""}`}>
             <div className=" navbar Cabecera-ul  Cabecera-li ">
               <a className="a-navbar Cabecera-li " href="#Home">
-                Home <span className="span-navbar"></span>
-              </a>
-              <a className="a-navbar Cabecera-li" href="#About Me">
-                About Me <span className="span-navbar"></span>
-              </a>
-              <a className="a-navbar Cabecera-li" href="#Skills">
-                Skills <span className="span-navbar"></span>
-              </a>
-              <a className="a-navbar Cabecera-li" href="#Portfolio">
-                Portfolio <span className="span-navbar"></span>
-              </a>
-              <a className="a-navbar Cabecera-li" href="#Contact">
-                Contact <span className="span-navbar"></span>
+                ALFA ROBOTICA <span className="span-navbar"></span>
               </a>
               <span className="span-navbar"></span>
             </div>

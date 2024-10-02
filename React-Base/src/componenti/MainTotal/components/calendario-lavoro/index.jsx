@@ -1,120 +1,135 @@
-import "./css/index.css";
-
-import React, { useState, useEffect } from "react";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker, TimePicker, StaticDatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import { TextField } from "@mui/material";
-// import { DetailsTable } from "./DetailsTable"; // Componente para la tabla de detalles
-import { DetailsTable_2 } from "./DetailsTable_2";
+// Importamos archivos CSS y librerías necesarias
+import "./css/index.css"; // Estilos personalizados
+import React, { useState, useEffect } from "react"; // Importamos hooks de React
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo"; // Contenedor para los selectores de fecha
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Adaptador para utilizar dayjs
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"; // Proveedor para la localización de fecha
+import { DatePicker, TimePicker, StaticDatePicker } from "@mui/x-date-pickers"; // Selectores de fecha y hora
+import dayjs from "dayjs"; // Librería para manipulación de fechas
+import { TextField } from "@mui/material"; // Componente de entrada de Material-UI
+import { DetailsTable } from "./DetailsTable"; // Componente para mostrar la tabla de detalles
+import Select from "react-select"; // Componente de selección de react-select
+import options from "./js/index.js";
 
 // Componente para seleccionar la hora
 const TimeSelector = ({ label, value, onChange }) => (
   <TimePicker label={label} value={value} onChange={onChange} />
 );
 
-// Componente para seleccionar la duración
-
-//   const durations = ["30 min", "1h", "1h 30min", "2h"];
+// Componente para seleccionar la duración a través de botones
 const DurationSelector = ({ onDurationClick, durations }) => (
-  <div className="flex flex-col  gap-5">
-    <div className="flex justify-center  items-center gap-5">
-      {durations.map((duration) => (
-        <button
-          className="w-16 h-16 bg-yellow-600 text-black rounded-full flex items-center justify-center  hover:bg-yellow-200 font-semibold"
-          key={duration}
-          onClick={() => onDurationClick(duration)}
-        >
-          {duration}
-        </button>
-      ))}
-    </div>
-    <button
-      className="h-14 font-semibold bg-yellow-700 hover:bg-yellow-200 rounded items-center border-white text-black"
-      onClick={() => onDurationClick("CONTINUATO")}
-    >
-      CONTINUATO
-    </button>
+  <div className="flex  justify-center items-center gap-5">
+    {durations.map((duration) => (
+      <button
+        className="w-16 h-16 bg-yellow-600 text-black rounded-full flex items-center justify-center hover:bg-yellow-200 font-semibold"
+        key={duration}
+        onClick={() => onDurationClick(duration)} // Al hacer clic, llama a onDurationClick con la duración correspondiente
+      >
+        {duration}
+      </button>
+    ))}
   </div>
 );
-export default function Logocopy15() {
+
+// Componente principal
+export default function CalendarioLavoro() {
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleChangelLista = (option) => {
+    setSelectedOption(option);
+    console.log(`Opción seleccionada:`, option);
+  };
+
+  // Estado inicial del componente
   const [state, setState] = useState({
-    selectedDate: dayjs(),
-    selectedTime: null,
-    endTime: null,
-    cliente: "",
-    duracion: "",
-    dates: [],
+    selectedDate: dayjs(), // Fecha seleccionada inicializada a hoy
+    selectedTime: null, // Hora de inicio seleccionada
+    endTime: null, // Hora de fin
+    NOTA_COMMESSA: "", // Nombre del NOTA_COMMESSA
+    duracion: "", // Duración seleccionada
+    dates: [], // Lista de fechas guardadas
+    selectedCLIENTE: null, // Sabor seleccionado
   });
 
+  // Efecto para cargar fechas desde localStorage al montar el componente
   useEffect(() => {
-    const loadDatesFromLocalStorage = () => {
+    const loadDates = () => {
       try {
-        const retrievedData = localStorage.getItem("dates");
+        const retrievedData = localStorage.getItem("dates"); // Obtener datos del localStorage
         if (retrievedData) {
           setState((prevState) => ({
             ...prevState,
-            dates: JSON.parse(retrievedData),
+            dates: JSON.parse(retrievedData), // Parsear y establecer las fechas en el estado
           }));
         }
       } catch (error) {
         console.error("Error loading dates from localStorage:", error);
       }
     };
-    loadDatesFromLocalStorage();
+    loadDates(); // Llamar a la función para cargar fechas
   }, []);
 
+  // Función para capturar la fecha y hora seleccionadas y actualizar el estado
   const handleCaptureDateAndTime = () => {
-    const { selectedDate, selectedTime, endTime, duracion, cliente } = state;
+    const {
+      selectedDate,
+      selectedTime,
+      endTime,
+      duracion,
+      selectedCLIENTE,
+      NOTA_COMMESSA,
+    } = state;
+
+    const CLIENTE = selectedOption ? selectedOption.value : selectedCLIENTE;
 
     if (selectedDate.isValid()) {
       const formattedDate = selectedDate.format("DD-MM-YYYY");
 
-      // Preparamos el nuevo objeto, asegurándonos de conservar los campos existentes si no han cambiado
       const updatedDates = [...state.dates];
       const idx = updatedDates.findIndex((date) => date.DATA === formattedDate);
 
+      // Verificamos si existe la entrada
       if (idx > -1) {
-        // Encontramos el objeto existente
         const existingEntry = updatedDates[idx];
 
-        // Creamos un nuevo objeto, solo actualizando los campos que pueden haber cambiado
         const updatedEntry = {
-          ...existingEntry, // Conservamos los valores existentes
+          ...existingEntry,
           INIZIO: selectedTime
             ? selectedTime.format("HH:mm")
             : existingEntry.INIZIO,
           FINE: endTime ? endTime.format("HH:mm") : existingEntry.FINE,
-          PRANZO: duracion || existingEntry.PRANZO,
-          CLIENTE: cliente || existingEntry.CLIENTE,
+          PAUSA: duracion || existingEntry.PAUSA,
+          CLIENTE: CLIENTE || existingEntry.CLIENTE,
+          NOTA_COMMESSA: NOTA_COMMESSA || existingEntry.NOTA_COMMESSA,
         };
 
-        // Actualizamos el objeto en la lista
         updatedDates[idx] = updatedEntry;
       } else {
         const combinedDetailsObject = {
           DATA: formattedDate,
           INIZIO: selectedTime ? selectedTime.format("HH:mm") : "",
           FINE: endTime ? endTime.format("HH:mm") : "",
-          PRANZO: duracion || "",
-          CLIENTE: cliente,
+          PAUSA: duracion || "",
+          CLIENTE: CLIENTE,
+          NOTA_COMMESSA: NOTA_COMMESSA,
         };
-        // Agregamos el nuevo objeto si no existe
+
         updatedDates.push(combinedDetailsObject);
       }
 
-      // Ordenamos las fechas de forma creciente
       const sortedDates = updatedDates.sort(
         (a, b) => dayjs(a.DATA, "DD-MM-YYYY") - dayjs(b.DATA, "DD-MM-YYYY")
       );
 
-      localStorage.setItem("dates", JSON.stringify(sortedDates));
-      setState((prevState) => ({ ...prevState, dates: sortedDates }));
+      try {
+        localStorage.setItem("dates", JSON.stringify(sortedDates));
+        setState((prevState) => ({ ...prevState, dates: sortedDates }));
+      } catch (error) {
+        console.error("Error saving dates to localStorage:", error);
+      }
     }
   };
-
+  // Función para manejar cambios en los campos
   const handleChange = (field) => (value) =>
     setState((prevState) => ({ ...prevState, [field]: value }));
 
@@ -130,79 +145,88 @@ export default function Logocopy15() {
       }
     }
   };
-
-  const durations = ["30 min", "1h", "1h 30min", "2h"];
+  // Duraciones que se pueden seleccionar
+  const durations = ["00:00", "00:30", "01:00", "01:30"];
 
   return (
-    <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={["DatePicker"]}>
-          <StaticDatePicker
-            orientation="portrait"
-            value={state.selectedDate}
-            onChange={handleChange("selectedDate")}
-          />
-          <DatePicker
-            label="SELEZIONA DATA"
-            value={state.selectedDate}
-            onChange={handleChange("selectedDate")}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                value={state.selectedDate.format("DD-MM-YYYY")}
-              />
-            )}
-          />
-          <TimeSelector
-            label="INIZIO"
-            value={state.selectedTime}
-            onChange={handleChange("selectedTime")}
-          />
-          <DurationSelector
-            onDurationClick={handleChange("duracion")}
-            durations={durations}
-          />
-          <TimeSelector
-            label="FINE"
-            value={state.endTime}
-            onChange={handleChange("endTime")}
-          />
-          <TextField
-            placeholder="sede o cliente"
-            value={state.cliente}
-            onChange={(e) => handleChange("cliente")(e.target.value)}
-          />
-        </DemoContainer>
-        <div className="flex flex-col gap-8 items-center ">
-          <div>
-            <button
-              className="bg-blue-500  p-4 rounded-full  text-2xl
-          hover:bg-yellow-400 font-mono hover:text-3xl hover:text-black font-semibold my-6 "
-              onClick={handleCaptureDateAndTime}
-            >
-              ok ✔
-            </button>
-          </div>
-          <div className=" flex flex-col  justify-center   items-center gap-8">
-            <div>
-              <h2 className="text-white text-2xl">ELENCO DATI :</h2>
-            </div>
-            <div>
-              <button
-                className="bg-yellow-500 p-1 text-red-800 rounded font-semibold
-         hover:bg-red-600 hover:text-black "
-                onClick={handleClearDates}
-              >
-                ELIMINARE DATI 🗑
-              </button>
-            </div>
-          </div>
-          <div>
-            {/* <DetailsTable dates={state.dates} /> */}
-            <DetailsTable_2 dates={state.dates} />
-          </div>
-        </div>
-      </LocalizationProvider>
-    </>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      {" "}
+      {/* Proveedor de localización */}
+      <DemoContainer components={["DatePicker"]}>
+        {" "}
+        {/* Contenedor demo */}
+        {/* Selector de fecha estático */}
+        <StaticDatePicker
+          orientation="portrait"
+          value={state.selectedDate}
+          onChange={handleChange("selectedDate")} // Manejar cambio de fecha
+        />
+        {/* Selector de fecha */}
+        <DatePicker
+          label="SELEZIONA DATA"
+          value={state.selectedDate}
+          onChange={handleChange("selectedDate")}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              value={state.selectedDate.format("DD-MM-YYYY")}
+            />
+          )}
+        />
+        {/* Selector de hora de inicio */}
+        <TimeSelector
+          label="INIZIO"
+          value={state.selectedTime}
+          onChange={handleChange("selectedTime")}
+        />
+        {/* Selector de duración */}
+        <DurationSelector
+          onDurationClick={handleChange("duracion")}
+          durations={durations}
+        />
+        {/* Selector de hora de fin */}
+        <TimeSelector
+          label="FINE"
+          value={state.endTime}
+          onChange={handleChange("endTime")}
+        />
+        {/* Campo de texto para el NOTA_COMMESSA */}
+        <TextField
+          placeholder="NOTA - COMMESSA - DESCRIZIONE"
+          value={state.NOTA_COMMESSA}
+          onChange={(e) => handleChange("NOTA_COMMESSA")(e.target.value)} // Manejar cambio en el campo de texto
+        />
+      </DemoContainer>
+      {/* Selector de sabor */}
+      <div>
+        <h1 className="text-xl font-bold ">SELEZIONA IL CLIENTE || SEDE </h1>
+        <Select
+          value={selectedOption}
+          onChange={handleChangelLista}
+          options={options}
+        />
+      </div>
+      <div className="flex flex-col gap-8 items-center ">
+        {/* Botón para confirmar la selección */}
+        <button
+          className="bg-blue-500 p-4 rounded-full text-2xl hover:bg-yellow-400 font-semibold my-6"
+          onClick={handleCaptureDateAndTime} // Capturar fecha y hora al hacer clic
+        >
+          ok ✔
+        </button>
+
+        <h2 className="text-white text-2xl">ELENCO DATI :</h2>
+        {/* Botón para eliminar datos */}
+        <button
+          className="bg-yellow-500 p-1 text-red-800 rounded font-semibold hover:bg-red-600 hover:text-black"
+          onClick={handleClearDates} // Limpiar datos al hacer clic
+        >
+          ELIMINARE DATI 🗑
+        </button>
+
+        {/* Mostrar la tabla de detalles */}
+        <DetailsTable dates={state.dates} />
+      </div>
+    </LocalizationProvider>
   );
 }

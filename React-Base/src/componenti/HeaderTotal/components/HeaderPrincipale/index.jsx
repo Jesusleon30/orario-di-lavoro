@@ -1,9 +1,6 @@
-
 import "./css/index.css";
 
 export default function HeaderPrincipale() {
-
-
   return (
     <>
       <section className=" ">
@@ -18,7 +15,9 @@ export default function HeaderPrincipale() {
           <div>
             <div className=" navbar  ">
               <a className="a-navbar" href="#Home">
-                ALFA ROBOTICA
+                <img
+                className="h-[80px] w-[220px] md:w-[340px]"
+                src="./assets/iconsLogo/alfa-robotica.PNG" alt="" />
               </a>
               <span className="span-navbar"></span>
             </div>

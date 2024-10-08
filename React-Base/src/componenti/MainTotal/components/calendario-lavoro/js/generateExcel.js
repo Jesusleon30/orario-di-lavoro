@@ -1,38 +1,65 @@
 // generateExcel.js
 
-// generateExcel.js: Define la función generateExcel que se encarga de crear y descargar el archivo Excel.
+import * as XLSX from "xlsx"; // Importa la libreria per gestire Excel
+import { saveAs } from "file-saver"; // Importa la libreria per scaricare file
 
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+// Funzione per validare i dati di input
+const validateData = (data) => {
+  if (!Array.isArray(data) || data.length === 0) {
+    throw new Error("I dati devono essere un array con almeno un elemento.");
+  }
 
-// Función para generar un archivo Excel
+  // Assicurati che ogni oggetto contenga le proprietà necessarie
+  const requiredKeys = [
+    "DATA",
+    "INIZIO",
+    "FINE",
+    "PAUSA",
+    "CLIENTE",
+    "COMMESSA",
+    "NOTA",
+  ];
+  data.forEach((item) => {
+    requiredKeys.forEach((key) => {
+      if (!item.hasOwnProperty(key)) {
+        throw new Error(`L'oggetto deve contenere la proprietà '${key}'.`);
+      }
+    });
+  });
+};
+
+// Funzione per generare un file Excel
 const generateExcel = (data) => {
   try {
-    // Validar si data es un array y tiene al menos un elemento
-    if (!Array.isArray(data) || data.length === 0) {
-      throw new Error("Los datos deben ser un array con al menos un elemento.");
-    }
+    validateData(data); // Validare i dati prima di procedere
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Dati orari");
+    const worksheet = XLSX.utils.json_to_sheet(data); // Convertire i dati in un foglio di calcolo
+    const workbook = XLSX.utils.book_new(); // Creare un nuovo libro
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Dati orari"); // Aggiungere il foglio al libro
 
     const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
+      bookType: "xlsx", // Specificare il tipo di libro
+      type: "array", // Specificare il tipo di uscita
     });
 
     const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Tipo di contenuto del file
     });
 
-    // Usar file-saver para descargar el archivo Excel
+    // Usare file-saver per scaricare il file Excel
     saveAs(blob, "Alfa Robotica orari di lavoro.xlsx");
   } catch (error) {
-    console.error("Error al generar el archivo Excel:", error.message);
-    alert(`Ocurrió un error al generar el archivo Excel: ${error.message}`);
-    // Puedes manejar el error de otras maneras, por ejemplo, registrándote en un servicio de seguimiento de errores
+    console.error(
+      "Errore durante la generazione del file Excel:",
+      error.message
+    ); // Registrare l'errore nella console
+    alert(
+      `Si è verificato un errore durante la generazione del file Excel: ${error.message}`
+    ); // Messaggio di errore per l'utente
+
+    // Qui potresti inviare l'errore a un servizio di monitoraggio se necessario
+    // inviareErroreAlServizio(error); // Esempio di funzione per inviare l'errore a un servizio esterno
   }
 };
 
-export default generateExcel;
+export default generateExcel; // Esporta la funzione per l'uso in altri moduli

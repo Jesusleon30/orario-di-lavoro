@@ -1,6 +1,6 @@
 .MuiPickersLayout-root {
   height: auto;
-  width: 50%;
+  width: 100%;
   color: blue;
 }
 
@@ -10,6 +10,8 @@
   align-items: center; /* Centrar verticalmente */
   height: auto;
   width: 30%;
+  gap:6px;
+
 }
 
 /* ocultamos el button di CANCEL */
@@ -21,3 +23,17 @@
   background: orange;
 }
 
+.MuiStack-root{
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center; /* Centrar horizontalmente */
+  align-items: center; /* Centrar verticalmente */
+
+}
+
+
+.css-10o21yd-MuiStack-root{
+  display: flex;
+  /* flex-direction: column; */
+
+}

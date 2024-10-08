@@ -37,6 +37,10 @@ const clienti = [
     commesse: [12524],
   },
   {
+    name: "Ruspa",
+    commesse: [11424],
+  },
+  {
     name: "Baruffaldi",
     commesse: [],
   },

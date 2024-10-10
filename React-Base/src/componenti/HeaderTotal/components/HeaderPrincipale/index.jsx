@@ -7,7 +7,7 @@ export default function HeaderPrincipale() {
         <header className="Cabecera justify-between">
           <button>
             <img
-              className="h-[80px] w-[80px]"
+              className="h-[70px] w-[70px] md:h-[80px] md:w-[80px] "
               src="./assets/iconsLogo/leone5.png"
               alt=""
             />
@@ -16,7 +16,7 @@ export default function HeaderPrincipale() {
             <div className=" navbar  ">
               <a className="a-navbar" href="#Home">
                 <img
-                className="h-[80px] w-[220px] md:w-[340px]"
+                className="h-[70px] w-[200px] md:h-[80px] md:w-[330px]"
                 src="./assets/iconsLogo/alfa-robotica.PNG" alt="" />
               </a>
               <span className="span-navbar"></span>

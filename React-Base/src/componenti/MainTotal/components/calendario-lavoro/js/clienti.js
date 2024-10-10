@@ -1,44 +1,48 @@
 // Datos de ejemplo para las categorías
 const clienti = [
   {
+    name: "--",
+    commesse: ["--"],
+  },
+  {
     name: "Salumificio Riva - ABB",
-    commesse: [11224, 11524],
+    commesse: ["--", 11224, 11524],
   },
   {
     name: "Nuova Engineering",
-    commesse: [11324, 11624],
+    commesse: ["--",11324, 11624],
   },
   {
     name: "Ancor",
-    commesse: [11724],
+    commesse: ["--",11724],
   },
   {
     name: "Cortenova - officina",
-    commesse: [11924],
+    commesse: ["--",11924],
   },
   {
     name: "Sitem",
-    commesse: [12024, 12324],
+    commesse: ["--",12024, 12324],
   },
   {
     name: "ABB - Piastra Adattamento",
-    commesse: [12124],
+    commesse: ["--",12124],
   },
   {
     name: "Cannon Ergos",
-    commesse: [12224],
+    commesse: ["--",12224],
   },
   {
     name: "Radiatori 2000",
-    commesse: [12424],
+    commesse: ["--",12424],
   },
   {
     name: "Electrolux",
-    commesse: [12524],
+    commesse: ["--",12524],
   },
   {
     name: "Ruspa",
-    commesse: [11424],
+    commesse: ["--",11424],
   },
   {
     name: "Baruffaldi",
@@ -137,7 +141,7 @@ const clienti = [
     commesse: [],
   },
   {
-    name: "",
+    name: "Steel Form Group",
     commesse: [],
   },
 ];

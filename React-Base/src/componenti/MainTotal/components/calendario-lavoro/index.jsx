@@ -1,27 +1,27 @@
-// Importa los estilos CSS para el componente
-import "./css/index.css";
-// Importa las librerías necesarias de React y sus hooks
-import React, { useState, useEffect } from "react";
-// Importa los componentes necesarios de Material-UI y MUI Date Pickers
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo"; // Contenedor para los componentes de fecha
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Adaptador para usar Day.js con MUI
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"; // Proveedor de localización para los selectores de fecha
-import { DatePicker, StaticDatePicker } from "@mui/x-date-pickers"; // Selectores de fecha
-import dayjs from "dayjs"; // Importa Day.js para manejar fechas
-import { TextField } from "@mui/material"; // Importa el campo de texto de Material-UI
-import TimeSelector from "./TimeSelector.jsx"; // Importa el selector de tiempo
-import DurationSelector from "./DurationSelector"; // Importa el selector de duración
-import DetailsTable from "./DetailsTable.jsx"; // Importa la tabla de detalles
-import MenuDoppio2 from "./MenuDoppio2"; // Importa el componente para seleccionar categorías y artículos
-import clienti from "./js/clienti.js"; // Importa las categorías disponibles
+import React, { useState, useEffect } from "react"; // Importa React y los hooks useState y useEffect
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo"; // Contenedor para los componentes de selección de fecha
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"; // Adaptador para usar Day.js con los selectores de MUI
+import {
+  LocalizationProvider,
+  DatePicker,
+  StaticDatePicker,
+} from "@mui/x-date-pickers"; // Importa los selectores de fecha y el proveedor de localización
+import dayjs from "dayjs"; // Importa Day.js para manipular fechas
+import { TextField } from "@mui/material"; // Importa el componente TextField de Material-UI
+import TimeSelector from "./TimeSelector.jsx"; // Importa un componente para seleccionar tiempos
+import DurationSelector from "./DurationSelector"; // Importa un componente para seleccionar duraciones
+import DetailsTable from "./DetailsTable.jsx"; // Importa un componente que muestra una tabla de detalles
+import MenuDoppio2 from "./MenuDoppio2"; // Importa un menú para seleccionar clientes y proyectos
+import clienti from "./js/clienti.js"; // Importa la lista de clientes disponibles
+import "./css/index.css"; // Importa los estilos CSS
 
 // Componente principal
 export default function CalendarioLavoro() {
   const [errorMessage, setErrorMessage] = useState(""); // Estado para manejar mensajes de error
-  const [selectedCLIENTE, setSelectedCLIENTE] = useState(-1); // Estado para la categoría seleccionada (inicialmente no se selecciona ninguna)
-  const [selectedCOMMESSA, setSelectedCOMMESSA] = useState(-1); // Estado para el artículo seleccionado (inicialmente no se selecciona ninguno)
+  const [selectedCLIENTE, setSelectedCLIENTE] = useState(-1); // Estado para el índice del cliente seleccionado
+  const [selectedCOMMESSA, setSelectedCOMMESSA] = useState(-1); // Estado para el índice de la tarea seleccionada
 
-  // Estado principal que contiene información de la fecha, hora, etc.
+  // Estado principal que mantiene la información sobre fecha, hora, etc.
   const [state, setState] = useState({
     selectedDate: dayjs(), // Fecha seleccionada inicial (hoy)
     selectedTime: null, // Hora de inicio seleccionada
@@ -31,7 +31,7 @@ export default function CalendarioLavoro() {
     dates: [], // Lista de fechas almacenadas
   });
 
-  // Efecto para cargar las fechas desde localStorage al montar el componente
+  // Efecto para cargar las fechas desde localStorage cuando se monta el componente
   useEffect(() => {
     const loadDates = () => {
       try {
@@ -39,41 +39,41 @@ export default function CalendarioLavoro() {
         if (retrievedData) {
           setState((prevState) => ({
             ...prevState,
-            dates: JSON.parse(retrievedData), // Parsear los datos a formato JSON
+            dates: JSON.parse(retrievedData), // Convierte los datos almacenados de JSON a un objeto
           }));
         }
         setErrorMessage(""); // Limpia el mensaje de error
       } catch (error) {
-        console.error("Error loading dates from localStorage:", error); // Registro del error en consola
-        setErrorMessage("Error al cargar las fechas. Inténtalo de nuevo."); // Mensaje de error
+        console.error("Error loading dates from localStorage:", error); // Muestra el error en la consola
+        setErrorMessage("Error al cargar las fechas. Inténtalo de nuevo."); // Establece un mensaje de error
       }
     };
     loadDates(); // Llama a la función para cargar las fechas
   }, []); // Este efecto se ejecuta solo una vez al montar el componente
 
-  // Maneja el cambio de categoría seleccionada
+  // Maneja el cambio en la selección del cliente
   const handleCLIENTEChange = (CLIENTEIndex) => {
-    setSelectedCLIENTE(CLIENTEIndex); // Actualiza el índice de la categoría seleccionada
-    setSelectedCOMMESSA(-1); // Resetea el artículo seleccionado al cambiar de categoría
+    setSelectedCLIENTE(CLIENTEIndex); // Actualiza el índice del cliente seleccionado
+    setSelectedCOMMESSA(-1); // Resetea el índice de la tarea seleccionada
   };
 
-  // Maneja el cambio de artículo seleccionado
+  // Maneja el cambio en la selección de la tarea
   const handleCOMMESSAChange = (COMMESSAIndex) => {
-    setSelectedCOMMESSA(COMMESSAIndex); // Actualiza el índice del artículo seleccionado
+    setSelectedCOMMESSA(COMMESSAIndex); // Actualiza el índice de la tarea seleccionada
   };
 
   // Función genérica para manejar cambios en el estado
   const handleChange = (field) => (value) =>
     setState((prevState) => ({ ...prevState, [field]: value })); // Actualiza el estado del campo especificado
 
-  // Maneja la captura de la fecha y hora seleccionadas
+  // Maneja la captura de la fecha y la hora seleccionadas
   const handleCaptureDateAndTime = () => {
-    const { selectedDate, selectedTime, endTime, duracion, NOTA } = state;
+    const { selectedDate, selectedTime, endTime, duracion, NOTA } = state; // Desestructura el estado
 
     if (selectedDate.isValid()) {
       // Verifica si la fecha seleccionada es válida
       const formattedDate = selectedDate.format("DD-MM-YYYY"); // Formatea la fecha
-      const updatedDates = [...state.dates]; // Copia la lista de fechas almacenadas
+      const updatedDates = [...state.dates]; // Crea una copia de la lista de fechas almacenadas
       const idx = updatedDates.findIndex((date) => date.DATA === formattedDate); // Busca si la fecha ya existe en la lista
 
       const selectedCLIENTEName =
@@ -81,7 +81,7 @@ export default function CalendarioLavoro() {
 
       const selectedCOMMESSAName =
         selectedCLIENTE > -1 && selectedCOMMESSA > -1
-          ? String(clienti[selectedCLIENTE].commesse[selectedCOMMESSA]) // Convertir a string
+          ? String(clienti[selectedCLIENTE].commesse[selectedCOMMESSA]) // Convierte el nombre de la tarea a string
           : "";
 
       try {
@@ -96,19 +96,19 @@ export default function CalendarioLavoro() {
             FINE: endTime ? endTime.format("HH:mm") : existingEntry.FINE, // Formatea la hora de fin
             PAUSA: duracion || existingEntry.PAUSA, // Mantiene la duración existente si no se selecciona una nueva
             CLIENTE: selectedCLIENTEName || existingEntry.CLIENTE, // Mantiene el cliente existente si no se selecciona uno nuevo
-            COMMESSA: selectedCOMMESSAName || existingEntry.COMMESSA, // Mantiene la commessa existente si no se selecciona una nueva
+            COMMESSA: selectedCOMMESSAName || existingEntry.COMMESSA, // Mantiene la tarea existente si no se selecciona una nueva
             NOTA: NOTA || existingEntry.NOTA, // Mantiene la nota existente si no se introduce una nueva
           };
           updatedDates[idx] = updatedEntry; // Actualiza la entrada en la lista
         } else {
           // Si la fecha no existe, crea una nueva entrada
           const newEntry = {
-            DATA: formattedDate,
+            DATA: formattedDate, // Asigna la fecha formateada
             INIZIO: selectedTime ? selectedTime.format("HH:mm") : "", // Formatea la hora de inicio
             FINE: endTime ? endTime.format("HH:mm") : "", // Formatea la hora de fin
             PAUSA: duracion || "", // Asigna la duración seleccionada
             CLIENTE: selectedCLIENTEName, // Asigna el nombre del cliente
-            COMMESSA: selectedCOMMESSAName, // Asigna el nombre de la commessa
+            COMMESSA: selectedCOMMESSAName, // Asigna el nombre de la tarea
             NOTA, // Asigna la nota
           };
           updatedDates.push(newEntry); // Agrega la nueva entrada a la lista
@@ -123,7 +123,7 @@ export default function CalendarioLavoro() {
         setState((prevState) => ({ ...prevState, dates: sortedDates })); // Actualiza el estado con la nueva lista
         setErrorMessage(""); // Limpia el mensaje de error
       } catch (error) {
-        console.error("Error updating dates:", error); // Registro del error en consola
+        console.error("Error updating dates:", error); // Muestra el error en la consola
         setErrorMessage("Error al guardar las fechas. Inténtalo de nuevo."); // Mensaje de error
       }
     } else {
@@ -141,7 +141,7 @@ export default function CalendarioLavoro() {
         setState((prevState) => ({ ...prevState, dates: [] })); // Resetea la lista de fechas en el estado
         setErrorMessage(""); // Limpia el mensaje de error
       } catch (error) {
-        console.error("Error clearing dates:", error); // Registro del error en consola
+        console.error("Error clearing dates:", error); // Muestra el error en la consola
         setErrorMessage("Error al eliminar las fechas. Inténtalo de nuevo."); // Mensaje de error
       }
     }
@@ -151,13 +151,12 @@ export default function CalendarioLavoro() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className=" md:flex ">
+      <div className="md:flex">
         <DemoContainer components={["DatePicker"]}>
-          <div className=" md:flex md:flex-col md:justify-center md:items-center md:gap-6  text-center">
+          <div className="md:flex md:flex-col md:justify-center md:items-center md:gap-6 text-center">
             <div className="md:flex md:justify-center md:items-center gap-20">
-              <div className="md:flex md:justify-center md:items-center ">
-                <div className="flex justify-center items-center my-4  ">
-                  {" "}
+              <div className="md:flex md:justify-center md:items-center">
+                <div className="flex justify-center items-center my-4">
                   <StaticDatePicker
                     orientation="portrait"
                     value={state.selectedDate}
@@ -165,13 +164,13 @@ export default function CalendarioLavoro() {
                   />
                 </div>
               </div>
-              <div className=" flex flex-col gap-4 ">
-                <div className=" flex flex-col text-center justify-center items-center gap-4 md:flex md:flex-col md:justify-center md:items-center">
+              <div className="flex flex-col gap-4">
+                <div className="flex flex-col text-center justify-center items-center gap-4 md:flex md:flex-col md:justify-center md:items-center">
                   <DatePicker
                     label="SELEZIONA DATA"
                     value={state.selectedDate}
                     onChange={handleChange("selectedDate")}
-                    renderInput={(params) => (
+                    textField={(params) => (
                       <TextField
                         {...params}
                         value={state.selectedDate.format("DD-MM-YYYY")}
@@ -209,7 +208,6 @@ export default function CalendarioLavoro() {
               </div>
             </div>
 
-            {/* Mensaje de error */}
             {errorMessage && (
               <div className="error-message">
                 <p className="text-red-600">{errorMessage}</p>

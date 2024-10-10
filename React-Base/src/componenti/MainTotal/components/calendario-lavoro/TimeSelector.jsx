@@ -1,7 +1,7 @@
-// src/components/TimeSelector.jsx
 import React, { useState } from "react"; // Importa React y useState
 import PropTypes from "prop-types"; // Importa PropTypes para validar propiedades
 import { TimePicker } from "@mui/x-date-pickers"; // Importa el componente TimePicker de MUI
+import TextField from "@mui/material/TextField"; // Importa TextField de MUI
 
 const TimeSelector = ({ label, value, onChange }) => {
   const [error, setError] = useState(""); // Estado para manejar errores
@@ -17,13 +17,12 @@ const TimeSelector = ({ label, value, onChange }) => {
 
   return (
     <div className="time-selector">
-      {" "}
       {/* Contenedor para el selector de tiempo */}
       <TimePicker
         label={label} // Etiqueta del selector
         value={value} // Valor actual del selector
         onChange={handleChange} // Maneja el cambio de valor
-        renderInput={(params) => (
+        textField={(params) => (
           <TextField {...params} error={!!error} helperText={error} />
         )} // Muestra el campo de texto con error
       />

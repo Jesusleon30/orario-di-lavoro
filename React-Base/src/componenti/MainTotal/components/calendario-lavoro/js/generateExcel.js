@@ -29,36 +29,33 @@ const validateData = (data) => {
 };
 
 // Funzione per generare un file Excel
-const generateExcel = (data) => {
+const generateExcel = (data, userName) => {
   try {
-    validateData(data); // Validare i dati prima di procedere
+    validateData(data);
 
-    const worksheet = XLSX.utils.json_to_sheet(data); // Convertire i dati in un foglio di calcolo
-    const workbook = XLSX.utils.book_new(); // Creare un nuovo libro
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Dati orari"); // Aggiungere il foglio al libro
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Dati orari");
 
     const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx", // Specificare il tipo di libro
-      type: "array", // Specificare il tipo di uscita
+      bookType: "xlsx",
+      type: "array",
     });
 
     const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // Tipo di contenuto del file
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    // Usare file-saver per scaricare il file Excel
-    saveAs(blob, "Alfa Robotica orari di lavoro.xlsx");
+    // Usar el nombre del usuario para guardar el archivo
+    saveAs(blob, `${userName}_orari_di_lavoro.xlsx`);
   } catch (error) {
     console.error(
       "Errore durante la generazione del file Excel:",
       error.message
-    ); // Registrare l'errore nella console
+    );
     alert(
       `Si è verificato un errore durante la generazione del file Excel: ${error.message}`
-    ); // Messaggio di errore per l'utente
-
-    // Qui potresti inviare l'errore a un servizio di monitoraggio se necessario
-    // inviareErroreAlServizio(error); // Esempio di funzione per inviare l'errore a un servizio esterno
+    );
   }
 };
 

@@ -1,52 +1,154 @@
-import React, { useCallback, useState } from "react"; // Importa React y hooks
-import PropTypes from "prop-types"; // Importa PropTypes para la validación de propiedades
-import generateExcel from "./js/generateExcel"; // Importa la función para generar el archivo Excel
+import React, { useCallback, useState } from "react"; // Importamos React y hooks
+import PropTypes from "prop-types"; // Importamos PropTypes para la validación de props
+import generateExcel from "./js/generateExcel"; // Importamos la función para generar el archivo Excel
 
-// Componente que representa la tabla de detalles
+// Componente principal que recibe una lista de fechas
 const DetailsTable = ({ dates }) => {
+  // Estado para mostrar mensajes al usuario (éxito o error)
   const [message, setMessage] = useState({ text: "", type: "" });
-  const [userName, setUserName] = useState(""); // Estado para almacenar el nombre del usuario
+  // Estado para almacenar el nombre del usuario
+  const [userName, setUserName] = useState("");
 
-  // Función que maneja la descarga del archivo Excel
+  // Función para convertir una cadena de tiempo "HH:mm" a minutos
+  const timeToMinutes = (timeString) => {
+    try {
+      // Separamos horas y minutos y convertimos a número
+      const [hours, minutes] = timeString.split(":").map(Number);
+      // Verificamos que las horas y minutos sean números válidos
+      if (isNaN(hours) || isNaN(minutes)) {
+        throw new Error("Formato de tiempo no válido"); // Lanzamos error si el formato es incorrecto
+      }
+      return hours * 60 + minutes; // Retornamos el total de minutos
+    } catch (error) {
+      setMessage({ text: error.message, type: "error" }); // Mostramos mensaje de error si ocurre una excepción
+      return 0; // Devuelve 0 si hay un error en la conversión
+    }
+  };
+
+  // Función para calcular los datos de tiempo trabajados
+  const calculateTimeData = () => {
+    let totalMinutes = 0; // Inicializamos el total de minutos trabajados
+    let totalStraordinario = 0; // Inicializamos el total de horas extraordinarias
+
+    // Mapeamos cada fecha para calcular el tiempo trabajado
+    const dailyData = dates.map((date) => {
+      try {
+        // Convertimos los tiempos de inicio, fin y pausa a minutos
+        const startMinutes = timeToMinutes(date.INIZIO);
+        const startMinutesPausa = timeToMinutes(date.PAUSA);
+        const endMinutes = timeToMinutes(date.FINE);
+        const workedMinutes = endMinutes - startMinutes - startMinutesPausa; // Calculamos el tiempo trabajado
+
+        // Solo sumamos si el tiempo trabajado es positivo
+        if (workedMinutes > 0) {
+          totalMinutes += workedMinutes; // Acumulamos minutos trabajados
+
+          // Si se han trabajado más de 8 horas, calculamos las horas extraordinarias
+          if (workedMinutes > 480) {
+            const straordinario = workedMinutes - 480; // Calculamos horas extraordinarias
+            totalStraordinario += straordinario; // Acumulamos horas extraordinarias
+          }
+        }
+
+        return {
+          ...date, // Retornamos los datos originales con información adicional
+          workedMinutes,
+          straordinario: workedMinutes > 480 ? workedMinutes - 480 : 0, // Asignamos horas extraordinarias
+        };
+      } catch (error) {
+        console.error("Error al calcular datos de tiempo:", error); // Log de errores
+        return { ...date, workedMinutes: 0, straordinario: 0 }; // Retornamos 0 en caso de error
+      }
+    });
+
+    return { dailyData, totalMinutes, totalStraordinario }; // Retornamos los datos calculados
+  };
+
+  // Llamamos a la función para calcular los datos
+  const { dailyData, totalMinutes, totalStraordinario } = calculateTimeData();
+
+  // Función para formatear minutos a cadena "HH:mm"
+  const formatMinutesToTime = (minutes) => {
+    const hours = Math.floor(minutes / 60)
+      .toString()
+      .padStart(2, "0"); // Calculamos las horas y las formateamos
+    const remainingMinutes = (minutes % 60).toString().padStart(2, "0"); // Calculamos los minutos restantes
+    return `${hours}:${remainingMinutes}`; // Retornamos la cadena formateada
+  };
+
+  // Función para manejar la descarga del archivo Excel
   const handleDownloadExcel = useCallback(() => {
-    setMessage({ text: "", type: "" });
+    setMessage({ text: "", type: "" }); // Reiniciamos el mensaje
 
     if (dates.length === 0) {
-      setMessage({ text: "Il file Excel è vuoto.", type: "error" });
+      // Verificamos si hay fechas
+      setMessage({ text: "Il file Excel è vuoto.", type: "error" }); // Mensaje de error si no hay datos
       return;
     }
 
-    // Pide el nombre del usuario antes de continuar
-    const name = prompt("Prima di scaricare il file, inserisci il tuo nome e cognome:", "");
-    if (name) {
-      setUserName(name); // Guardar el nombre en el estado
-
-      // Verifica que todos los datos necesarios estén presentes
-      const isValid = dates.every(
-        (date) => date.DATA && date.INIZIO && date.FINE && date.PAUSA
+    try {
+      // Pedimos el nombre al usuario
+      const name = prompt(
+        "Prima di scaricare il file, inserisci il tuo nome e cognome:",
+        ""
       );
 
-      if (!isValid) {
+      if (!name) {
+        // Verificamos si el nombre fue ingresado
         setMessage({
-          text: "Alcuni dati sono mancanti.",
+          text: "Devi inserire il tuo nome e cognome.",
           type: "error",
-        });
+        }); // Mensaje de error
         return;
       }
 
-      try {
-        // Llama a la función para generar el archivo Excel con el nombre del usuario
-        generateExcel(dates, name);
-        setMessage({ text: "Excel scaricato con successo!", type: "success" });
-      } catch (error) {
-        console.error("Errore durante la generazione dell'Excel:", error);
-        setMessage({
-          text: "Si è verificato un errore durante la generazione dell'Excel.",
-          type: "error",
-        });
+      setUserName(name); // Guardamos el nombre del usuario
+
+      // Verificamos si todos los datos necesarios están presentes
+      const isValid = dates.every(
+        (date) => date.DATA && date.INIZIO && date.FINE && date.PAUSA
+      );
+      if (!isValid) {
+        setMessage({ text: "Alcuni dati sono mancanti.", type: "error" }); // Mensaje de error si faltan datos
+        return;
       }
+
+      // Preparamos los datos para el archivo Excel
+      const excelData = dailyData.map((date) => ({
+        DATA: date.DATA,
+        INIZIO: date.INIZIO,
+        FINE: date.FINE,
+        PAUSA: date.PAUSA,
+        CLIENTE: date.CLIENTE,
+        COMMESSA: date.COMMESSA,
+        NOTA: date.NOTA,
+        Ore_Lavorate: formatMinutesToTime(date.workedMinutes), // Formateamos horas trabajadas
+        Ore_Straordinarie: formatMinutesToTime(date.straordinario), // Formateamos horas extraordinarias
+      }));
+
+      // Agregamos una fila con los totales
+      excelData.push({
+        DATA: "Totale",
+        INIZIO: "",
+        FINE: "",
+        PAUSA: "",
+        CLIENTE: "",
+        COMMESSA: "",
+        NOTA: "",
+        Ore_Lavorate: formatMinutesToTime(totalMinutes),
+        Ore_Straordinarie: formatMinutesToTime(totalStraordinario),
+      });
+
+      generateExcel(excelData, name); // Llamamos a la función para generar el Excel
+      setMessage({ text: "Excel scaricato con successo!", type: "success" }); // Mensaje de éxito
+    } catch (error) {
+      console.error("Errore durante la generazione dell'Excel:", error); // Log de errores
+      setMessage({
+        text: "Si è verificato un errore durante la generazione dell'Excel.",
+        type: "error",
+      }); // Mensaje de error
     }
-  }, [dates]); // Dependencia del hook
+  }, [dates]);
 
   return (
     <div className="flex flex-col items-center justify-between gap-5 p-5 bg-gray-800 rounded-lg shadow-lg">
@@ -68,6 +170,17 @@ const DetailsTable = ({ dates }) => {
         </div>
       )}
 
+      <div className="text-white ">
+        <p>
+          Totale ore lavorate: {Math.floor(totalMinutes / 60)}h{" "}
+          {totalMinutes % 60}m
+        </p>
+        <p>
+          Totale Ore straordinarie: {Math.floor(totalStraordinario / 60)}h{" "}
+          {totalStraordinario % 60}m
+        </p>
+      </div>
+
       <table className="bg-yellow-300">
         <thead>
           <tr className="bg-yellow-500 border-b-2 border-blue-600 flex flex-wrap">
@@ -78,10 +191,14 @@ const DetailsTable = ({ dates }) => {
             <th className="py-2 px-3 text-left">CLIENTE</th>
             <th className="py-2 px-3 text-left">COMMESSA</th>
             <th className="py-2 px-3 text-left">NOTA</th>
+            <th className="py-2 px-3 text-left bg-white ">Ore Lavorate</th>
+            <th className="py-2 px-3 text-left bg-black text-white">
+              Ore Straordinarie
+            </th>
           </tr>
         </thead>
         <tbody>
-          {dates.map((date, index) => (
+          {dailyData.map((date, index) => (
             <tr
               key={index}
               className="hover:bg-blue-500 transition flex flex-wrap m-2 gap-2 border-b-2 border-blue-600"
@@ -93,6 +210,12 @@ const DetailsTable = ({ dates }) => {
               <td className="py-2 px-3 border">{date.CLIENTE}</td>
               <td className="py-2 px-3 border">{date.COMMESSA}</td>
               <td className="py-2 px-3 border">{date.NOTA}</td>
+              <td className="py-2 px-3 border bg-white">
+                {formatMinutesToTime(date.workedMinutes)}
+              </td>
+              <td className="py-2 px-3 border bg-black text-white">
+                {formatMinutesToTime(date.straordinario)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -101,7 +224,6 @@ const DetailsTable = ({ dates }) => {
   );
 };
 
-// Validación de las propiedades del componente
 DetailsTable.propTypes = {
   dates: PropTypes.arrayOf(
     PropTypes.shape({
@@ -116,5 +238,4 @@ DetailsTable.propTypes = {
   ).isRequired,
 };
 
-// Exporta el componente para su uso en otras partes de la aplicación
 export default DetailsTable;

@@ -140,6 +140,7 @@ export default function CalendarioLavoro() {
         localStorage.removeItem("dates"); // Elimina las fechas de localStorage
         setState((prevState) => ({ ...prevState, dates: [] })); // Resetea la lista de fechas en el estado
         setErrorMessage(""); // Limpia el mensaje de error
+        window.location.reload(); // Recarga la página para reflejar los cambios
       } catch (error) {
         console.error("Error clearing dates:", error); // Muestra el error en la consola
         setErrorMessage("Error al eliminar las fechas. Inténtalo de nuevo."); // Mensaje de error

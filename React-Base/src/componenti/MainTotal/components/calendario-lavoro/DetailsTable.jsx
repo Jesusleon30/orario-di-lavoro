@@ -1,166 +1,222 @@
-import React, { useCallback, useEffect, useState } from "react"; // Importa React y hooks
+import React, { useEffect, useState } from "react"; // Importa React e i suoi hook
 import PropTypes from "prop-types"; // Importa PropTypes per la validazione delle proprietà
-import generateExcel from "./js/generateExcel"; // Importa la funzione per generare l'Excel
+import generateExcel from "./js/generateExcel"; // Importa la funzione per generare il file Excel
 
-const DetailsTable = ({ dates }) => { // Definisce il componente DetailsTable e accetta la proprietà 'dates'
-  // Stato per gestire i messaggi (successo/errore)
+// Definizione del componente DetailsTable
+const DetailsTable = ({ dates }) => {
+  // Stato per messaggi di feedback
   const [message, setMessage] = useState({ text: "", type: "" });
-  const [userName, setUserName] = useState(""); // Stato per il nome utente
-  const [timeData, setTimeData] = useState({ // Stato per i dati di tempo
-    dailyData: [], // Dati giornalieri
-    totalMinutes: 0, // Totale minuti lavorati
-    totalStraordinario: 0, // Totale straordinario
+
+  // Stato per i dati temporali
+  const [timeData, setTimeData] = useState({
+    dailyData: [],
+    totalMinutes: 0,
+    totalStraordinario: 0,
   });
 
-  // Funzione per convertire la stringa di tempo in minuti
-  const timeToMinutes = (timeString) => {
-    if (!timeString) return 0; // Gestisce la stringa di tempo vuota
+  // Stato per il download automatico
+  const [autoDownloaded, setAutoDownloaded] = useState(false);
 
-    // Convalida il formato del tempo "HH:MM"
+  // Funzione per convertire una stringa di tempo in minuti
+  const timeToMinutes = (timeString) => {
+    if (!timeString) return 0; // Restituisce 0 se la stringa è vuota
+    // Controlla il formato della stringa
     if (!/^([01]?\d|2[0-3]):([0-5]\d)$/.test(timeString)) {
       throw new Error(
-        `Formato di tempo non valido: "${timeString}". Deve essere "HH:MM".`
+        `Formato tempo non valido: "${timeString}". Deve essere "HH:MM".`
       );
     }
-
-    const [hours, minutes] = timeString.split(":").map(Number); // Estrae ore e minuti
-    return hours * 60 + minutes; // Ritorna il totale in minuti
+    const [hours, minutes] = timeString.split(":").map(Number); // Divide la stringa in ore e minuti
+    return hours * 60 + minutes; // Restituisce il totale in minuti
   };
 
-  // Effetto per calcolare i dati di tempo ogni volta che 'dates' cambia
+  // Effetto per calcolare i dati temporali e gestire il download automatico
   useEffect(() => {
-    if (dates.length === 0) { // Controlla se l'array 'dates' è vuoto
-      setMessage({ text: " ", type: "error" }); // Imposta un messaggio di errore
-      return; // Esce dalla funzione
+    const hasAutoDownloaded = localStorage.getItem("hasAutoDownloaded"); // Controlla se è già stato fatto il download automatico
+    setAutoDownloaded(hasAutoDownloaded === "true"); // Imposta lo stato
+
+    if (dates.length === 0) {
+      // Se non ci sono date disponibili
+      setMessage({ text: " ", type: "error" }); // Mostra un messaggio di errore
+      return;
     }
 
-    const calculateTimeData = () => { // Funzione per calcolare i dati di tempo
-      let totalMinutes = 0; // Inizializza il totale minuti
-      let totalStraordinario = 0; // Inizializza il totale straordinario
+    // Funzione per calcolare i dati temporali
+    const calculateTimeData = () => {
+      let totalMinutes = 0; // Totale minuti lavorati
+      let totalStraordinario = 0; // Totale straordinari
 
-      // Processa ogni data per calcolare i minuti lavorati e gli straordinari
       const dailyData = dates.map((date) => {
         try {
-          const startMinutes = timeToMinutes(date.INIZIO); // Converte l'inizio in minuti
-          const startMinutesPausa = timeToMinutes(date.PAUSA); // Converte la pausa in minuti
-          const endMinutes = timeToMinutes(date.FINE); // Converte la fine in minuti
+          const startMinutes = timeToMinutes(date.INIZIO); // Inizio in minuti
+          const startMinutesPausa = timeToMinutes(date.PAUSA); // Pausa in minuti
+          const endMinutes = timeToMinutes(date.FINE); // Fine in minuti
           const workedMinutes = endMinutes - startMinutes - startMinutesPausa; // Calcola i minuti lavorati
 
-          // Assicura che i minuti lavorati siano positivi
           if (workedMinutes > 0) {
-            totalMinutes += workedMinutes; // Aggiunge ai minuti totali
-            if (workedMinutes > 480) { // Se i minuti lavorati superano 8 ore
-              totalStraordinario += workedMinutes - 480; // Calcola lo straordinario
+            // Se ci sono minuti lavorati
+            totalMinutes += workedMinutes; // Aggiorna il totale
+            if (workedMinutes > 480) {
+              // Se i minuti superano le 8 ore
+              totalStraordinario += workedMinutes - 480; // Calcola gli straordinari
             }
           }
 
           return {
-            ...date, // Ritorna tutti i dati della data
-            workedMinutes, // Aggiunge i minuti lavorati
-            straordinario: workedMinutes > 480 ? workedMinutes - 480 : 0, // Aggiunge gli straordinari
+            ...date, // Restituisce i dati originali con i nuovi campi
+            workedMinutes,
+            straordinario: workedMinutes > 480 ? workedMinutes - 480 : 0,
           };
         } catch (error) {
-          console.error("Errore nel calcolo dei dati di tempo:", error); // Logga l'errore
-          return { ...date, workedMinutes: 0, straordinario: 0 }; // Ritorna la data con valori di tempo a 0
+          console.error("Errore nel calcolo dei dati temporali:", error);
+          return { ...date, workedMinutes: 0, straordinario: 0 }; // Restituisce 0 in caso di errore
         }
       });
 
-      return { dailyData, totalMinutes, totalStraordinario }; // Ritorna i dati giornalieri e i totali
+      return { dailyData, totalMinutes, totalStraordinario }; // Restituisce i dati calcolati
     };
 
     try {
-      const { dailyData, totalMinutes, totalStraordinario } = calculateTimeData(); // Calcola i dati di tempo
-      setTimeData({ dailyData, totalMinutes, totalStraordinario }); // Imposta i dati di tempo nello stato
-    } catch (error) {
-      console.error("Errore durante il calcolo dei dati di tempo:", error); // Logga l'errore
-      setMessage({ text: "Errore nel calcolo dei dati.", type: "error" }); // Imposta un messaggio di errore
-    }
-  }, [dates]); // Dipendenza: esegue quando 'dates' cambia
+      const { dailyData, totalMinutes, totalStraordinario } =
+        calculateTimeData(); // Calcola i dati
+      setTimeData({ dailyData, totalMinutes, totalStraordinario }); // Aggiorna lo stato
 
-  // Funzione per formattare i minuti in "HH:MM"
+      if (dailyData.length >= 12 && !autoDownloaded) {
+        // Se ci sono almeno 12 giorni e non è già stato scaricato
+        const isValid = dailyData.every(
+          (date) => date.DATA && date.INIZIO && date.FINE && date.PAUSA // Controlla se tutti i dati sono presenti
+        );
+
+        if (!isValid) {
+          // Se ci sono dati mancanti
+          setMessage({
+            text: "Per favore completa tutti i campi prima di scaricare.",
+            type: "error",
+          });
+          return;
+        }
+
+        const name = prompt(
+          "Per favore inserisci il tuo nome e cognome per il download automatico:",
+          ""
+        );
+        if (!name) {
+          // Se il nome non è fornito
+          setMessage({
+            text: "Devi inserire il tuo nome e cognome per il download automatico.",
+            type: "error",
+          });
+          return;
+        }
+
+        handleDownloadExcel(dailyData, totalMinutes, totalStraordinario, name); // Gestisce il download
+        setAutoDownloaded(true); // Imposta lo stato per il download automatico
+        localStorage.setItem("hasAutoDownloaded", "true"); // Memorizza il download
+      }
+    } catch (error) {
+      console.error("Errore durante il calcolo del tempo:", error);
+      setMessage({
+        text: "Errore nel calcolo dei dati temporali.",
+        type: "error",
+      });
+    }
+  }, [dates, autoDownloaded]);
+
+  // Funzione per formattare i minuti in ore e minuti
   const formatMinutesToTime = (minutes) => {
-    const hours = Math.floor(minutes / 60) // Calcola le ore
+    const hours = Math.floor(minutes / 60)
       .toString()
-      .padStart(2, "0"); // Formatta le ore con due cifre
+      .padStart(2, "0"); // Calcola le ore
     const remainingMinutes = (minutes % 60).toString().padStart(2, "0"); // Calcola i minuti rimanenti
-    return `${hours}:${remainingMinutes}`; // Ritorna il formato "HH:MM"
+    return `${hours}:${remainingMinutes}`; // Restituisce la stringa formattata
   };
 
   // Funzione per gestire il download dell'Excel
-  const handleDownloadExcel = useCallback(() => {
+  const handleDownloadExcel = (
+    dailyData,
+    totalMinutes,
+    totalStraordinario,
+    name
+  ) => {
     setMessage({ text: "", type: "" }); // Reset del messaggio
 
-    if (dates.length === 0) { // Controlla se l'array 'dates' è vuoto
-      setMessage({ text: "Il file Excel è vuoto.", type: "error" }); // Messaggio di errore
-      return; // Esce dalla funzione
+    // Controlla se i dati giornalieri sono vuoti
+    if (dailyData.length === 0) {
+      setMessage({ text: "Nessun dato da scaricare.", type: "error" });
+      return;
     }
 
-    const name = prompt( // Chiede all'utente il nome
-      "Prima di scaricare il file, inserisci il tuo nome e cognome:",
-      ""
-    );
-    if (!name) { // Controlla se il nome è stato inserito
+    // Controlla se il nome è fornito
+    if (!name) {
       setMessage({
-        text: "Devi inserire il tuo nome e cognome.",
-        type: "error", // Messaggio di errore
+        text: "Devi inserire il tuo nome e cognome per scaricare il file.",
+        type: "error",
       });
-      return; // Esce dalla funzione
+      return;
     }
-    setUserName(name); // Imposta il nome utente
 
-    // Valida che tutti i campi necessari siano presenti
     const isValid = dates.every(
-      (date) => date.DATA && date.INIZIO && date.FINE && date.PAUSA // Controlla i campi richiesti
+      (date) => date.DATA && date.INIZIO && date.FINE && date.PAUSA // Controlla se i dati sono completi
     );
-    if (!isValid) { // Se ci sono dati mancanti
-      setMessage({ text: "Alcuni dati sono mancanti.", type: "error" }); // Messaggio di errore
-      return; // Esce dalla funzione
+    if (!isValid) {
+      setMessage({
+        text: "Alcuni dati sono mancanti, verifica che INIZIO - FINE - PAUSA siano compilati. GRAZIE 😉",
+        type: "error",
+      });
+      return;
     }
 
-    // Prepara i dati per l'esportazione in Excel
-    const excelData = timeData.dailyData.map((date) => ({
-      DATA: date.DATA, // Data
-      INIZIO: date.INIZIO, // Orario di inizio
-      FINE: date.FINE, // Orario di fine
-      PAUSA: date.PAUSA, // Durata della pausa
-      CLIENTE: date.CLIENTE, // Nome del cliente
-      COMMESSA: date.COMMESSA, // Nome del progetto
-      NOTA: date.NOTA, // Note
-      Ore_Lavorate: formatMinutesToTime(date.workedMinutes), // Ore lavorate formattate
-      Ore_Straordinarie: formatMinutesToTime(date.straordinario), // Ore straordinarie formattate
+    const excelData = dailyData.map((date) => ({
+      DATA: date.DATA,
+      INIZIO: date.INIZIO,
+      FINE: date.FINE,
+      PAUSA: date.PAUSA,
+      CLIENTE: date.CLIENTE,
+      COMMESSA: date.COMMESSA,
+      NOTA: date.NOTA,
+      Ore_Lavorate: formatMinutesToTime(date.workedMinutes), // Formatta le ore lavorate
+      Ore_Straordinarie: formatMinutesToTime(date.straordinario), // Formatta le ore straordinarie
     }));
 
-    // Aggiunge la riga dei totali
+    // Aggiunge la riga totale
     excelData.push({
-      DATA: "Totale", // Indica che questa è la riga dei totali
+      DATA: "Totale",
       INIZIO: "",
       FINE: "",
       PAUSA: "",
       CLIENTE: "",
       COMMESSA: "",
       NOTA: "",
-      Ore_Lavorate: formatMinutesToTime(timeData.totalMinutes), // Totale ore lavorate
-      Ore_Straordinarie: formatMinutesToTime(timeData.totalStraordinario), // Totale ore straordinarie
+      Ore_Lavorate: formatMinutesToTime(totalMinutes), // Formatta il totale delle ore lavorate
+      Ore_Straordinarie: formatMinutesToTime(totalStraordinario), // Formatta il totale delle ore straordinarie
     });
 
     try {
       generateExcel(excelData, name); // Genera il file Excel
-      setMessage({ text: "Excel scaricato con successo!", type: "success" }); // Messaggio di successo
+      setMessage({ text: "Excel scaricato con successo! 👍", type: "success" });
     } catch (error) {
-      console.error("Errore durante la generazione dell'Excel:", error); // Logga l'errore
+      console.error("Errore durante la generazione dell'Excel:", error);
       setMessage({
-        text: "Si è verificato un errore durante la generazione dell'Excel.",
-        type: "error", // Messaggio di errore
+        text: "Si è verificato un errore durante la generazione del file Excel.",
+        type: "error",
       });
     }
-  }, [dates, timeData]); // Dipendenze: esegue quando 'dates' o 'timeData' cambiano
-
+  };
   return (
     <div className="flex flex-col items-center justify-between gap-3 p-5 bg-gray-800 rounded-lg shadow-lg">
       <button
         className="bg-gray-400 rounded text-black border-2 hover:bg-white p-2 font-semibold"
-        onClick={handleDownloadExcel}
-        aria-label="Scarica Excel"
+        onClick={() =>
+          handleDownloadExcel(
+            timeData.dailyData,
+            timeData.totalMinutes,
+            timeData.totalStraordinario,
+            prompt(
+              "Prima di scaricare il file, inserisci il tuo nome e cognome:"
+            )
+          )
+        }
+        aria-label="Download Excel"
       >
         SCARICA EXCEL
       </button>

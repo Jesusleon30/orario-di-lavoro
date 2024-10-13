@@ -45,7 +45,7 @@ export default function CalendarioLavoro() {
         setErrorMessage(""); // Limpia el mensaje de error
       } catch (error) {
         console.error("Error loading dates from localStorage:", error); // Muestra el error en la consola
-        setErrorMessage("Error al cargar las fechas. Inténtalo de nuevo."); // Establece un mensaje de error
+        setErrorMessage("Errore al caricare le date. Prova di nuovo."); // Establece un mensaje de error
       }
     };
     loadDates(); // Llama a la función para cargar las fechas
@@ -124,26 +124,28 @@ export default function CalendarioLavoro() {
         setErrorMessage(""); // Limpia el mensaje de error
       } catch (error) {
         console.error("Error updating dates:", error); // Muestra el error en la consola
-        setErrorMessage("Error al guardar las fechas. Inténtalo de nuevo."); // Mensaje de error
+        setErrorMessage("Errore al archivio delle date. Prova di nuovo."); // Mensaje de error
       }
     } else {
-      setErrorMessage("Fecha seleccionada no válida."); // Mensaje de error si la fecha no es válida
+      setErrorMessage("Data selezionata non valida."); // Mensaje de error si la fecha no es válida
     }
   };
 
   // Maneja la eliminación de las fechas almacenadas
+
   const handleClearDates = () => {
-    const confirmDelete = window.confirm("Sei sicuro di voler eliminare?"); // Confirma la eliminación
+    const confirmDelete = window.confirm("Sei sicuro di voler eliminare? "); // Confirma la eliminación
     if (confirmDelete) {
       // Si el usuario confirma
       try {
         localStorage.removeItem("dates"); // Elimina las fechas de localStorage
+        localStorage.removeItem("hasAutoDownloaded"); // Elimina el estado de descarga automática
         setState((prevState) => ({ ...prevState, dates: [] })); // Resetea la lista de fechas en el estado
         setErrorMessage(""); // Limpia el mensaje de error
         window.location.reload(); // Recarga la página para reflejar los cambios
       } catch (error) {
         console.error("Error clearing dates:", error); // Muestra el error en la consola
-        setErrorMessage("Error al eliminar las fechas. Inténtalo de nuevo."); // Mensaje de error
+        setErrorMessage("Errore al eliminare le Date. Prova di nuovo."); // Mensaje de error
       }
     }
   };

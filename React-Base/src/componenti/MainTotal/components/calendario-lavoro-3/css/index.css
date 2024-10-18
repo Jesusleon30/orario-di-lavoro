@@ -1,0 +1,34 @@
+
+  
+  /* ocultamos el button di CANCEL */
+  /* .MuiDialogActions-root button:first-child {
+    display: none; /* Oculta el primer botón (Cancel) */
+  
+
+
+
+  
+  .MuiPickersToolbar-root {
+    background: #ea7a4c;
+  }
+  
+  .MuiDayCalendar-monthContainer{
+    background: #ffb46e;
+  }
+
+  .MuiDateCalendar-root{
+    background: #ffb46e;
+  }
+
+  .MuiDialogActions-root{
+    background:#ffb46e;
+  }
+
+  .MuiFormLabel-root {
+    font-weight: 800 !important;
+    color:black!important;
+    font-size:1.1rem !important;
+
+}
+
+

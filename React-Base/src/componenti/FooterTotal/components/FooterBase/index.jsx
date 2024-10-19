@@ -12,7 +12,7 @@ export default function FooterBase(props) {
         <div>Automazione</div>
         <div>Robotica ABB </div>
         <div>Developer full stack</div> 
-        <div>frontend & backend- Hugo Leon</div>
+        <div>frontend & backend - Hugo Leon</div>
         <div>Data Science</div>
         <div>2024</div>
         <div className="img-footer m-3">

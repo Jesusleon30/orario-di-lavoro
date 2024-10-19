@@ -50,17 +50,18 @@ export default function MenuDoppio2({
       : []; // Si no hay cliente seleccionado, no hay opciones
 
   return (
-    <div className="container mt-4 flex justify-center items-center gap-3">
+    <div className="container flex justify-center items-center ">
       {error && (
         <div className="alert alert-danger" role="alert">
           {error} {/* Muestra mensaje de error si existe */}
         </div>
       )}
+      
 
-      <div className="row g-3">
+      <div className="row flex flex-col items-center justify-center ">
         {/* Columna para el selector de clientes */}
-        <div className="col-md-6">
-          <h3 className="h6 mb-3 font-bold text-xl ">Cliente</h3>
+        <div className="col-md-10">
+          <h3 className="h6 mb-4 mt-4 font-bold text-xl  "> Cliente</h3>
           <Select
             options={clientOptions} // Pasa las opciones de clientes
             onChange={handleClientChange} // Función para manejar el cambio de cliente
@@ -69,8 +70,8 @@ export default function MenuDoppio2({
         </div>
 
         {/* Columna para el selector de commessas */}
-        <div className="col-md-6">
-          <h3 className="h6 mb-4 mt-8 font-bold text-xl">Commessa</h3>
+        <div className="col-md-10">
+          <h3 className="h6 mb-4 mt-4 font-bold text-xl">Commessa</h3>
           <Select
             options={commessaOptions} // Pasa las opciones de commessas
             onChange={handleCommessaChange} // Función para manejar el cambio de commessa

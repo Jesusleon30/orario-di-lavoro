@@ -4,7 +4,7 @@ export default function HeaderPrincipale() {
   return (
     <>
       <section className=" ">
-        <header className="Cabecera justify-between gap-4 ">
+        <header className="Cabecera justify-between items-center  ">
           <button>
             <img
               className="h-[80px] w-[80px] md:h-[100px] md:w-[100px] "
@@ -16,24 +16,30 @@ export default function HeaderPrincipale() {
             <div className=" navbar flex items-center justify-center  ">
               <a className="a-navbar" href="#Home">
                 <img
-                className=" a-navbar h-[60px] w-[90px] a-navbar"
-                 src="./assets/iconsLogo/alfa-robotica3.png" alt="" />
+                  className=" a-navbar h-[60px] w-[90px] a-navbar"
+                  src="./assets/iconsLogo/alfa-robotica3.png"
+                  alt=""
+                />
               </a>
               <span className="span-navbar"></span>
             </div>
-
           </div>
-          <div className="md:flex  ">
-              <div >
-                <img
-                className="h-[70px] w-[140px] "
-                 src="./assets/iconsLogo/Alfa.png" alt="" /> </div>
-              <div>
-                <img
-                className="h-[80px] w-[280px] "
-                src="./assets/iconsLogo/Robotica.png" alt="" />
-                </div>
-              </div>
+          <div className="flex justify-center items-center flex-col md:flex-row ">
+            <div>
+              <img
+                className="h-[75px] w-[200px] "
+                src="./assets/iconsLogo/Alfa-4.png"
+                alt=""
+              />
+            </div>
+            <div>
+              <img
+                className="h-[90px] w-[300px] "
+                src="./assets/iconsLogo/Robotica-4.png"
+                alt=""
+              />
+            </div>
+          </div>
 
           <div>
             <button className="leone6">

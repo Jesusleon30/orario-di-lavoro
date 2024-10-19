@@ -205,7 +205,7 @@ const DetailsTable = ({ dates }) => {
   return (
     <div className="flex flex-col items-center justify-between gap-3 p-5 bg-gray-800 rounded-lg shadow-lg">
       <button
-        className="bg-gray-400 rounded text-black border-2 hover:bg-white p-2 font-semibold "
+        className="bg-gray-400 rounded text-black border-2 hover:bg-[#60a5fa] p-2 font-semibold "
         onClick={() =>
           handleDownloadExcel(
             timeData.dailyData,

@@ -157,9 +157,9 @@ export default function CalendarioLavoro_3() {
       <div className="md:flex">
         <DemoContainer components={["DatePicker"]}>
           <div className="md:flex md:flex-col md:justify-center md:items-center md:gap-6 text-center">
-            <div className="md:flex md:justify-center md:items-center gap-20">
-              <div className="md:flex md:justify-center md:items-center">
-                <div className="flex justify-center items-center my-4">
+            <div className="md:flex md:justify-center md:items-center md:gap-20">
+              <div className="md:flex md:justify-center md:items-center ">
+                <div className="flex justify-center items-center my-3 ">
                   <StaticDatePicker
                     orientation="portrait"
                     value={state.selectedDate}
@@ -168,7 +168,7 @@ export default function CalendarioLavoro_3() {
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <div className="flex flex-col text-center justify-center items-center gap-8 my-6 mt-12 md:flex md:flex-col md:justify-center md:items-center">
+                <div className="flex flex-col text-center justify-center items-center gap-5 my-6  md:flex md:flex-col md:justify-center md:items-center">
                   <DatePicker
                     label="SELEZIONA DATA"
                     value={state.selectedDate}
@@ -186,7 +186,11 @@ export default function CalendarioLavoro_3() {
                     onChange={handleChange("selectedTime")}
                   />
                   <div>
-                    <p className="text-xl font-bold ">Pausa Pranzo</p>
+                    <img
+                      className="w-[275px] h-[80px]"
+                      src="./assets/iconsLogo/Pausa-Pranzo-2.png"
+                      alt=""
+                    />
                   </div>
 
                   <DurationSelector
@@ -222,7 +226,7 @@ export default function CalendarioLavoro_3() {
               </div>
             )}
 
-            <div className="flex flex-col gap-8 my-6 items-center">
+            <div className="flex flex-col gap-9 justify-center items-center">
               <button
                 className="bg-[#140f07] w-[200px] h-[110px] rounded-full  hover:bg-[#60a5fa] font-semibold my-12"
                 onClick={handleCaptureDateAndTime}
@@ -231,7 +235,7 @@ export default function CalendarioLavoro_3() {
               </button>
               <h2 className=" text-2xl font-bold text-black ">ELENCO DATI :</h2>
               <button
-                className="bg-[#be123c] p-3 text-white rounded font-bold hover:bg-[#f43f5e] hover:text-black"
+                className="bg-[#be123c] p-3 text-white rounded font-bold hover:bg-[#60a5fa] hover:text-black"
                 onClick={handleClearDates}
               >
                 ELIMINARE DATI 🗑

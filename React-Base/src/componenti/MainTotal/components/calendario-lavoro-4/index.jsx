@@ -235,12 +235,25 @@ export default function CalendarioLavoro_3() {
               </button>
               <h2 className=" text-2xl font-bold text-black ">ELENCO DATI :</h2>
               <button
-                className="bg-[#be123c] p-3 text-white rounded font-bold hover:bg-[#60a5fa] hover:text-black"
+                className="bg-[#be123c] p-3 flex gap-3 justify-center items-center rounded font-bold hover:bg-[#60a5fa] hover:text-black"
                 onClick={handleClearDates}
               >
-                ELIMINARE DATI 🗑
+                <div>ELIMINARE DATI</div>
+                <div>
+                  <img
+                    className="w-[30px] h-[30px]"
+                    src="./assets/iconsLogo/cestino.png"
+                    alt=""
+                  />
+                </div>
               </button>
-              <DetailsTable dates={state.dates} />
+
+              <DetailsTable
+                dates={state.dates}
+                setDates={(newDates) =>
+                  setState((prev) => ({ ...prev, dates: newDates }))
+                }
+              />
             </div>
           </div>
         </DemoContainer>

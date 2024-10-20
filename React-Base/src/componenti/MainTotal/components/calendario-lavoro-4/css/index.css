@@ -9,19 +9,23 @@
 
   
   .MuiPickersToolbar-root {
-    background: #ea7a4c;
+    background: #ff9900;
+    /* background: orange; */
+    
   }
   
   .MuiDayCalendar-monthContainer{
-    background: #ffb46e;
+    background: #FFC525;
   }
 
   .MuiDateCalendar-root{
-    background: #ffb46e;
+    background: #FFC525;
+    opacity: 0.7;
   }
 
   .MuiDialogActions-root{
-    background:#ffb46e;
+    background: #FFC525;
+    opacity: 0.7;
   }
 
   .MuiFormLabel-root {

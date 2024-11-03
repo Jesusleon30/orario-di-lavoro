@@ -16,7 +16,7 @@ import clienti from "./js/clienti.js"; // Importa la lista de clientes disponibl
 import "./css/index.css"; // Importa los estilos CSS
 
 // Componente principal
-export default function CalendarioLavoro_3() {
+export default function CalendarioLavoro_2() {
   const [errorMessage, setErrorMessage] = useState(""); // Estado para manejar mensajes de error
   const [selectedCLIENTE, setSelectedCLIENTE] = useState(-1); // Estado para el índice del cliente seleccionado
   const [selectedCOMMESSA, setSelectedCOMMESSA] = useState(-1); // Estado para el índice de la tarea seleccionada

@@ -1,6 +1,7 @@
 
-export { default as CalendarioLavoro } from "./calendario-lavoro";
-export { default as CalendarioLavoro_4 } from "./calendario-lavoro-4";
+export { default as CalendarioLavoro_1 } from "./calendario-lavoro-1";
+export { default as CalendarioLavoro_2 } from "./calendario-lavoro-2";
+export { default as CalendarioLavoro_3 } from "./calendario-lavoro-3";
 
 
 

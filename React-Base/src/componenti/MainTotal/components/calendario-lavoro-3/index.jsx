@@ -16,7 +16,7 @@ const CalendarioLavoro_3 = () => {
   // Estado para manejar la fecha seleccionada, horarios y otras variables
   const [state, setState] = useState({
     selectedDate: dayjs(), // Fecha seleccionada inicial
-    selectedTime: dayjs(), // Hora seleccionada
+    selectedTime: null, // Hora seleccionada
     endTime: null, // Hora de finalización
     NOTA: "", // Nota adicional
     duracion: "", // Duración

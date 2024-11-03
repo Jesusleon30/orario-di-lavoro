@@ -235,17 +235,22 @@ const DetailsTable = ({ dates, setDates }) => {
   // Función para manejar el cambio de las entradas
   const handleInputChange = (index, field, value) => {
     try {
+      // Asegúrate de que el nombre no esté vacío antes de realizar cambios
       if (!name) {
         toast.error("Devi inserire un nome per creare o modificare le voci!");
         return;
       }
 
+      // Actualiza el estado de fechas
       const updatedDates = [...dates];
       updatedDates[index][field] = value;
 
       setDates(updatedDates);
       localStorage.setItem("dates", JSON.stringify(updatedDates));
-      toast.success("Entrata aggiornata con successo!");
+      // Solo muestra un mensaje de éxito si hay cambios significativos
+      if (field === "INIZIO" || field === "FINE" || field === "PAUSA") {
+        toast.success("Entrata aggiornata con successo!");
+      }
     } catch (error) {
       toast.error("Errore nell'aggiornare l'entrata: " + error.message);
     }

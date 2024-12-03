@@ -12,6 +12,15 @@ import AddClientModal_2 from "./AddClientModal_2.jsx"; // Segundo modal para agr
 import clienti from "./js/clienti.js"; // Importa lista de clientes
 import TextField from "@mui/material/TextField"; // Componente TextField de Material UI
 
+import "dayjs/locale/it";
+import updateLocale from 'dayjs/plugin/updateLocale';
+dayjs.extend(updateLocale);
+// Replace "en" with the name of the locale you want to update.
+dayjs.updateLocale('it', {
+  // Sunday = 0, Monday = 1.
+  weekStart: 1,
+});
+
 const CalendarioLavoro_3 = () => {
   // Estado para manejar la fecha seleccionada, horarios y otras variables
   const [state, setState] = useState({
@@ -195,7 +204,7 @@ const CalendarioLavoro_3 = () => {
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="it">
       {" "}
       {/* Proveedor de localización */}
       <div className="md:flex">
@@ -211,6 +220,9 @@ const CalendarioLavoro_3 = () => {
                   onChange={handleChange("selectedDate")} // Maneja el cambio de fecha
                   slots={{
                     textField: (params) => <TextField {...params} />, // Renderiza el TextField
+                  }}
+                  slotProps={{
+                    toolbar: { toolbarFormat: 'dddd DD', hidden: false },
                   }}
                 />
               </div>

@@ -13,10 +13,10 @@ export default function HeaderPrincipale() {
             />
           </button>
           <div>
-            <div className=" navbar flex items-center justify-center  ">
+            <div className=" flex items-center justify-center  ">
               <a className="a-navbar" href="#Home">
                 <img
-                  className=" a-navbar h-[60px] w-[90px] a-navbar"
+                  className=" a-navbar h-[60px] w-[90px] rounded"
                   src="./assets/iconsLogo/alfa-robotica3.png"
                   alt=""
                 />

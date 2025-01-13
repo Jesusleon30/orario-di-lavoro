@@ -31,3 +31,18 @@
     
     gap:20px;
 }
+
+.card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center; 
+    gap: 10px;
+    flex-direction: column;
+    border-radius: 10px;
+    font-size: 15px;
+    line-height: 20px;
+    
+}
+
+  

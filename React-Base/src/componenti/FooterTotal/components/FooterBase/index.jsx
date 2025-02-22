@@ -15,8 +15,10 @@ export default function FooterBase(props) {
           <div>VIA ROMA N°404</div>
           <div>CARONNO PERTUSELLA (VA)</div>
           <div>CAP: 21042</div>
-          <div>P.iva: 12259080153</div>
-          <div>Codice Univoco: SUBM70N</div>
+          <div>Partita IVA :</div>
+          <div>12259080153</div>
+          <div>Codice Univoco :</div>
+          <div>SUBM70N</div>
           <div >
             <ul>
               <li>
@@ -26,7 +28,7 @@ export default function FooterBase(props) {
                   rel="noopener noreferrer"
                 >
                   <img
-                  className="w-[75px] h-[50px] rounded  hover:w-[100px] hover:h-[70px] hover:rounded  "
+                  className="w-[75px] h-[50px] rounded  hover:w-[100px] hover:h-[70px] hover:rounded "
                     src="./assets/iconsLogo/alfa-robotica3.png"
                     alt="sito di Alfa Robotica"
                   />

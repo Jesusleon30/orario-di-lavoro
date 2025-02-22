@@ -37,10 +37,6 @@ const clienti = [
     commesse: ["--",12424],
   },
   {
-    name: "Electrolux",
-    commesse: ["--",12524],
-  },
-  {
     name: "Ruspa",
     commesse: ["--",11424],
   },
@@ -197,10 +193,6 @@ const clienti = [
     commesse: ["--"],
   },
   {
-    name: "Arvin Meritor",
-    commesse: ["--"],
-  },
-  {
     name: "Asitech",
     commesse: ["--"],
   },
@@ -209,8 +201,8 @@ const clienti = [
     commesse: ["--"],
   },
   {
-    name: "Autotest Fortezza",
-    commesse: ["--"],
+    name: "Autotest",
+    commesse: ["--", 12824],
   },
   {
     name: "AVM angelini",
@@ -222,7 +214,7 @@ const clienti = [
   },
   {
     name: "Baruffaldi",
-    commesse: ["--"],
+    commesse: ["--", 2822, 2922],
   },
   {
     name: "Beretta",
@@ -270,7 +262,7 @@ const clienti = [
   },
   {
     name: "Casartelli",
-    commesse: ["--"],
+    commesse: ["--", 12624],
   },
   {
     name: "Castigioni Robotica",
@@ -361,12 +353,12 @@ const clienti = [
     commesse: ["--"],
   },
   {
-    name: "Effebi Imbutitura",
-    commesse: ["--"],
+    name: "Effebi",
+    commesse: ["--", 13824],
   },
   {
     name: "Electrolux",
-    commesse: ["--"],
+    commesse: ["--", 12524, 13624, 13724],
   },
   {
     name: "Enolgas",
@@ -657,6 +649,10 @@ const clienti = [
     commesse: ["--"],
   },
   {
+    name: "Meritor",
+    commesse: ["--", 12924, 13024, 13124, 13224],
+  },
+  {
     name: "Milani Enrico",
     commesse: ["--"],
   },
@@ -674,7 +670,7 @@ const clienti = [
   },
   {
     name: "Munters",
-    commesse: ["--"],
+    commesse: ["--", 12724],
   },
   {
     name: "NCN pressofusione",
@@ -766,7 +762,7 @@ const clienti = [
   },
   {
     name: "Patrini",
-    commesse: ["--"],
+    commesse: ["--", 13324],
   },
   {
     name: "PetrolCoatings",
@@ -801,8 +797,8 @@ const clienti = [
     commesse: ["--"],
   },
   {
-    name: "RAEL Motori",
-    commesse: ["--"],
+    name: "RAEL",
+    commesse: ["--", 13424, 13524],
   },
   {
     name: "Rain",

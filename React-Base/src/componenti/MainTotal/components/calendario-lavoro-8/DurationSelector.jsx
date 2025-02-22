@@ -1,8 +1,10 @@
-import React from "react"; // Importa React
-import PropTypes from "prop-types"; // Importa PropTypes per la validazione delle proprietà
+import React, { useState } from "react"; // Importa React y useState
+import PropTypes from "prop-types"; // Importa PropTypes para la validación de propiedades
 
 // Componente che rappresenta il selettore di durate
 const DurationSelector = ({ onDurationClick, durations }) => {
+  const [selectedDuration, setSelectedDuration] = useState(null); // Estado para la duración seleccionada
+
   // Verifica se le durate sono valide
   if (!Array.isArray(durations) || durations.length === 0) {
     // Se non è un array o è vuoto, restituisci un messaggio di errore
@@ -14,15 +16,22 @@ const DurationSelector = ({ onDurationClick, durations }) => {
       {/* Mappa attraverso le durate e crea un pulsante per ciascuna */}
       {durations.map((duration) => (
         <button
-          className="w-16 h-16 bg-yellow-600 text-black rounded-full flex items-center justify-center hover:bg-yellow-200 font-semibold"
+          className={`w-16 h-16 rounded-full flex items-center justify-center font-semibold ${
+            selectedDuration === duration
+              ? "bg-[#2476da]" // Color de fondo cuando está seleccionado
+              : "bg-[#755221] hover:bg-[#60a5fa]" // Color de fondo y hover
+          } text-white`}
           key={duration} // Chiave unica per ogni pulsante
           onClick={() => {
             try {
+              setSelectedDuration(duration); // Actualiza la duración seleccionada
               onDurationClick(duration); // Chiama la funzione onDurationClick passando la durata
             } catch (error) {
               // In caso di errore durante la chiamata della funzione
               console.error("Errore durante la selezione della durata:", error);
-              alert("Si è verificato un errore durante la selezione della durata."); // Messaggio di errore
+              alert(
+                "Si è verificato un errore durante la selezione della durata."
+              ); // Messaggio di errore
             }
           }}
         >

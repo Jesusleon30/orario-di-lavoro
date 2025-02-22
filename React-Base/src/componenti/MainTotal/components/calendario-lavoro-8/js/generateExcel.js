@@ -9,15 +9,7 @@ const validateData = (data) => {
   }
 
   // Chiavi richieste per ogni oggetto
-  const requiredKeys = [
-    "DATA",
-    "INIZIO",
-    "FINE",
-    "PAUSA",
-    "CLIENTE",
-    "COMMESSA",
-    "NOTA",
-  ];
+  const requiredKeys = ["DATA"];
 
   // Controlla che ogni oggetto contenga le proprietà richieste
   data.forEach((item, index) => {
@@ -36,6 +28,7 @@ const generateExcel = (data, userName) => {
   try {
     // Validazione dei dati
     validateData(data);
+    
   } catch (error) {
     console.error("Errore nella validazione dei dati:", error.message);
     alert(`Errore di validazione: ${error.message}`);
@@ -43,8 +36,22 @@ const generateExcel = (data, userName) => {
   }
 
   try {
+    // Prepara i dati con valori predefiniti
+    const preparedData = data.map((item) => ({
+      DATA: item.DATA,
+      INIZIO: item.INIZIO || "00:00", // Valore predefinito
+      FINE: item.FINE || "00:00", // Valore predefinito
+      PAUSA: item.PAUSA || "00:00", // Valore predefinito
+      CLIENTE: item.CLIENTE || "N/A", // Valore predefinito
+      COMMESSA: item.COMMESSA || "N/A", // Valore predefinito
+      LUOGO: item.POSTO || "N/A", // Aggiungi la colonna "POSTO"
+      NOTA: item.NOTA || "N/A", // Valore predefinito
+      Ore_Lavorate: item.Ore_Lavorate || "N/A", // Se disponibile
+      Ore_Straordinarie: item.Ore_Straordinarie || "N/A", // Se disponibile
+    }));
+
     // Crea un foglio di lavoro da dati JSON
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    const worksheet = XLSX.utils.json_to_sheet(preparedData);
 
     // Imposta la larghezza delle colonne
     const columnWidths = [
@@ -54,7 +61,8 @@ const generateExcel = (data, userName) => {
       { wch: 10 }, // Larghezza per PAUSA
       { wch: 20 }, // Larghezza per CLIENTE
       { wch: 15 }, // Larghezza per COMMESSA
-      { wch: 20 }, // Larghezza per NOTA
+      { wch: 15 }, // Larghezza per POSTO
+      { wch: 30 }, // Larghezza per NOTA
       { wch: 15 }, // Larghezza per Ore Lavorate
       { wch: 20 }, // Larghezza per Ore Straordinarie
     ];
@@ -73,7 +81,7 @@ const generateExcel = (data, userName) => {
     };
 
     // Applica stile a ogni cella dell'intestazione
-    const headers = Object.keys(data[0]);
+    const headers = Object.keys(preparedData[0]);
     headers.forEach((header, index) => {
       const cell = worksheet[XLSX.utils.encode_cell({ r: 0, c: index })]; // Ottiene la cella
       if (cell) {

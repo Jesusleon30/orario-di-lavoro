@@ -18,7 +18,7 @@ export default function FooterBase(props) {
           <div>Partita IVA :</div>
           <div>12259080153</div>
           <div>Codice Univoco :</div>
-          <div>SUBM70N</div>
+          <div>M5UXCR1</div>
           <div >
             <ul>
               <li>

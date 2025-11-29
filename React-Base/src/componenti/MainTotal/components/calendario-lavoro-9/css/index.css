@@ -1,0 +1,42 @@
+/* oculto el cancel y el ok  */
+/* .MuiDialogActions-root button:first-child {
+  display: none;
+} */
+
+/* .MuiDialogActions-root button:last-child {
+  display: none;
+} */
+
+
+
+.MuiDayCalendar-monthContainer {
+  /* background: #ffc525; */
+  background: #FF8C00;
+}
+
+.MuiDateCalendar-root {
+  background: #FF8C00;
+  opacity: 0.7;
+}
+
+.MuiDialogActions-root {
+  background: #FF8C00;
+  opacity: 0.7;
+}
+
+.MuiFormLabel-root {
+  font-weight: 800 !important;
+  color: black !important;
+  font-size: 1.1rem !important;
+}
+
+.MuiTypography-subtitle2 {
+  color: white !important;
+  font-weight: 800 !important;
+  font-size: 25px !important;
+}
+
+.Mui-selected {
+  color: blue !important;
+}
+
